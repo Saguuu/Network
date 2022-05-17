@@ -1,0 +1,11 @@
+.home {
+    padding: 10px;
+}
+
+.home__container {
+    display: flex;
+    color: white;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}

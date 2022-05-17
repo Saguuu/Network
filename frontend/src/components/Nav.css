@@ -1,0 +1,16 @@
+.nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.nav__item {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    gap: 5px;
+}
+
+.nav__itemImage {
+    color: white;
+}
