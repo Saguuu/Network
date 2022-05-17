@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from itsdangerous import Serializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serilializers import PostSerializer, FollowSerializer, UserSerializer
+from .serilializers import PostSerializer, FollowSerializer, UserSerializer, siteUserSerializer
 from .models import Post, Follow, siteUser
 from django.contrib.auth.models import User
 
@@ -14,7 +13,8 @@ def apiOverview(request):
     api_urls = {
         "Post": "/post-list/",
         "User": "/user-list/",
-        "Follow": "/follow-list/<str:pk>/",
+        "Followed": "/followed-list/<str:pk>/",
+        "Following": "/following-list/<str:pk>/",
         "Single Post": "/post-single/<str:pk>/",
         "Create Post": "/post-create/",
         "Update Post": "/post-update/<str:pk>/",
@@ -28,8 +28,8 @@ def apiOverview(request):
 @api_view(["GET"])
 def userList(request):
 
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
+    users = siteUser.objects.all()
+    serializer = siteUserSerializer(users, many=True)
 
     return Response(serializer.data)
 
@@ -79,11 +79,17 @@ def postDelete(request, pk):
     return Response("Post Deleted")
 
 @api_view(["GET"])
-def followList(request, pk):
+def followFollowedBy(request, pk):
 
-    user = User.objects.get(id=pk)
-    site_user = siteUser.objects.get(user=user)
-    following = site_user.user_follows.all()
+    following = Follow.objects.all().filter(followee=pk)
+    serializer = FollowSerializer(following, many=True)
+
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def followFollowing(request, pk):
+
+    following = Follow.objects.all().filter(follower=pk)
     serializer = FollowSerializer(following, many=True)
 
     return Response(serializer.data)
