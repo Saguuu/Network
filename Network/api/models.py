@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 class siteUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="site_user")
+    image = models.URLField(default="https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")
 
     def __str__(self):
         return f"{self.user}"
@@ -16,7 +17,7 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.poster} 's post"
+        return f"{self.poster.user.username, self.poster.image}"
 
 class Follow(models.Model):
     follower = models.ForeignKey(siteUser, on_delete=models.CASCADE, related_name="user_follows")
