@@ -24,3 +24,7 @@
 .nav__itemImage {
     color: white;
 }
+
+.nav__itemText {
+    font-size: 20px;
+}
