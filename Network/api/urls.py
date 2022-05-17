@@ -9,7 +9,8 @@ urlpatterns = [
     path("post-create/", views.postCreate, name="post-create"),
     path("post-update/<str:pk>/", views.postUpdate, name="post-update"),
     path("post-delete/<str:pk>/", views.postDelete, name="post-delete"),
-    path("follow-list/<str:pk>/", views.followList, name="follow-list"),
+    path("followed-list/<str:pk>/", views.followFollowedBy, name="followed-list"),
+    path("following-list/<str:pk>/", views.followFollowing, name="following-list"),
     path("follow-follow/", views.followFollow, name="follow-follow"),
     path("follow-unfollow/", views.followUnfollow, name="follow-unfollow")
 ]
