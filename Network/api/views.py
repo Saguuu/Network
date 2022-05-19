@@ -13,7 +13,7 @@ def apiOverview(request):
     api_urls = {
         "Post": "/post-list/",
         "User": "/user-list/",
-        "Followed": "/followed-list/<str:pk>/",
+        "Followed By": "/followed-list/<str:pk>/",
         "Following": "/following-list/<str:pk>/",
         "Posts By Following": "/post-following/<str:pk>",
         "Single Post": "/post-single/<str:pk>/",
