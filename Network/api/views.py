@@ -15,6 +15,7 @@ def apiOverview(request):
         "User": "/user-list/",
         "Followed": "/followed-list/<str:pk>/",
         "Following": "/following-list/<str:pk>/",
+        "Posts By Following": "/post-following/<str:pk>",
         "Single Post": "/post-single/<str:pk>/",
         "Create Post": "/post-create/",
         "Update Post": "/post-update/<str:pk>/",
@@ -39,7 +40,7 @@ def postList(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
 
-    return Response(serializer.data)
+    return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
 
 @api_view(["GET"])
 def postSingle(request, pk):
@@ -79,12 +80,32 @@ def postDelete(request, pk):
     return Response("Post Deleted")
 
 @api_view(["GET"])
+def postFollowing(request, pk):
+    
+    # Query database for followed users, serialize data and convert to one dimensional list, then reverse sort by time created
+    response1 = []
+    following = Follow.objects.all().filter(follower=pk)
+
+    for i in following:
+        response1.append(PostSerializer(Post.objects.all().filter(poster=i.followee), many=True).data)
+
+    response2 = []
+
+    for i in response1:
+        for j in i:
+            response2.append(j)
+    
+    response3 = sorted(response2, key=lambda d: d["id"], reverse=True)
+    
+    return Response(response3)
+
+@api_view(["GET"])
 def followFollowedBy(request, pk):
 
     following = Follow.objects.all().filter(followee=pk)
     serializer = FollowSerializer(following, many=True)
 
-    return Response(serializer.data)
+    return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
 
 @api_view(["GET"])
 def followFollowing(request, pk):
@@ -92,7 +113,7 @@ def followFollowing(request, pk):
     following = Follow.objects.all().filter(follower=pk)
     serializer = FollowSerializer(following, many=True)
 
-    return Response(serializer.data)
+    return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
 
 @api_view(["POST"])
 def followFollow(request):
