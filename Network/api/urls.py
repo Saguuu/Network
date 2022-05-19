@@ -6,6 +6,7 @@ urlpatterns = [
     path("user-list/", views.userList, name="user-list"),
     path("post-list/", views.postList, name="post-list"),
     path("post-single/<str:pk>/", views.postSingle, name="post-single"),
+    path("post-following/<str:pk>/", views.postFollowing, name="post-following"),
     path("post-create/", views.postCreate, name="post-create"),
     path("post-update/<str:pk>/", views.postUpdate, name="post-update"),
     path("post-delete/<str:pk>/", views.postDelete, name="post-delete"),
