@@ -1,16 +1,18 @@
 import React from 'react';
 import "./Home.css";
-import Nav from "./Nav.js";
+import HomeFeed from './HomeFeed';
+import Nav from './Nav';
 
 const Home = () => {
-  return (
-    <div className="home">
-        <div className="home__container">
-            <Nav />
-            { /* feed component */ }
+    return (
+        <div className="home">
+            <div className="home__container">
+                <Nav />
+                <HomeFeed />
+                { /* Following feed component */ }
+            </div>
         </div>
-    </div>
-  );
+    );
 }
 
 export default Home
