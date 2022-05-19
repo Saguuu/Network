@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     poster = serializers.CharField(source="poster.user.username")
-    pooster_image = serializers.CharField(source="poster.image")
+    poster_image = serializers.CharField(source="poster.image")
     
     class Meta:
         model = Post
