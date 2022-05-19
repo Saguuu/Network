@@ -17,7 +17,7 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.poster.user.username, self.poster.image}"
+        return f"{self.poster.user.username}'s post"
 
 class Follow(models.Model):
     follower = models.ForeignKey(siteUser, on_delete=models.CASCADE, related_name="user_follows")
