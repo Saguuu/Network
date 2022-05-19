@@ -1,23 +1,24 @@
 .nav {
     display: flex;
-    border: 1px solid white;
     justify-content: space-between;
-    position: fixed;
-    height: 100%;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
 }
 
 .nav__container {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-left: 8vw;
+    margin-left: -8vw;
     margin-right: 8vw;
 }
 
 .nav__item {
     display: flex;
-    padding: 5px;
     align-items: center;
+    margin-bottom: 10px;
     gap: 15px;
 }
 
