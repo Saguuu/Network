@@ -1,14 +1,13 @@
 import React from 'react';
 import "./Post.css";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteBorderOutlined from '@mui/icons-material/FavoriteBorderOutlined';
 
 const Post = ({ id, poster, image, content, likes, date }) => {
     return (
         <div className="post">
             <div className="post__header">
                 <div className="post__headerLeft">
-                    <img className="post__headerImage" src={ image } />
+                    <img className="post__headerImage" src={ image } alt="userImg" />
                     <h3 className="post__headerName">{ poster }</h3>
                 </div>
                 <div className="post__headerRight">
