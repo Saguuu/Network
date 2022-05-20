@@ -1,16 +1,33 @@
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serilializers import PostSerializer, FollowSerializer, UserSerializer, siteUserSerializer
 from .models import Post, Follow, siteUser
-from django.contrib.auth.models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Create your views here.
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        token['image'] = user.site_user.image
+        # ...
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 @api_view(["GET"])
 def apiOverview(request):
 
     api_urls = {
+        "Token": "/token/",
+        "Token Refresh": "/token/refresh/",
         "Post": "/post-list/",
         "User": "/user-list/",
         "Followed By": "/followed-list/<str:pk>/",
@@ -24,7 +41,7 @@ def apiOverview(request):
         "Unfollow User": "/unfollow-user/"
     }
 
-    return Response(api_urls)
+    return Response(api_urls)  
 
 @api_view(["GET"])
 def userList(request):
