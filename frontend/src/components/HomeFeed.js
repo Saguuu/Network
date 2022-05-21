@@ -17,8 +17,6 @@ const HomeFeed = () => {
         fetchPosts();
     }, [])
 
-    console.log(posts);
-
     return (
         <div className="homefeed">
             {posts.map((post) => (
