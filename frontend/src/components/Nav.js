@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, } from 'react-router-dom';
 import "./Nav.css";
 import HomeIcon from '@mui/icons-material/Home';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -8,9 +8,13 @@ import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import LoginIcon from '@mui/icons-material/Login';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import AuthContext from '../context/AuthContext';
 
 const Nav = () => {
-  return (
+
+    let {user} = useContext(AuthContext);
+
+    return (
     <div className="nav">
         <div className="nav__container">
             <Link to="/">
@@ -28,6 +32,7 @@ const Nav = () => {
                 </div>
             </div>
             </Link>
+            {user ? (
             <div className="nav__item">
                 <TagIcon fontSize="large" className="nav__itemImage"> 
                 </TagIcon>
@@ -35,6 +40,8 @@ const Nav = () => {
                     <h3>Following</h3>
                 </div>
             </div>
+            ): ("")}
+            {user ? (
             <div className="nav__item">
                 <EmailIcon fontSize="large" className="nav__itemImage"> 
                 </EmailIcon>
@@ -42,6 +49,8 @@ const Nav = () => {
                     <h3>Messages</h3>
                 </div>
             </div>
+            ): ("")}
+            {user ? (
             <div className="nav__item">
                 <PersonIcon fontSize="large" className="nav__itemImage"> 
                 </PersonIcon>
@@ -49,16 +58,18 @@ const Nav = () => {
                     <h3>Profile</h3>
                 </div>
             </div>
+            ): ("")}
             <Link to="/login" style={{ textDecoration: 'none' }}>
             <div className="nav__item">
                 <LoginIcon fontSize="large" className="nav__itemImage"> 
                 </LoginIcon>
                 <div className="nav__itemText">
-                    <h3>Guest - Login</h3>
+                    <h3>{!user ? 'Guest - Login' : "Welcome - " + user.username}</h3>
                 </div>
             </div>
             </Link>
             <Link to="/login" style={{ textDecoration: 'none' }}>
+            {!user ? (
             <div className="nav__item">
                 <AppRegistrationIcon fontSize="large" className="nav__itemImage"> 
                 </AppRegistrationIcon>
@@ -66,6 +77,7 @@ const Nav = () => {
                     <h3>Register</h3>
                 </div>
             </div>
+            ): ("")}
             </Link>
         </div>
     </div>
