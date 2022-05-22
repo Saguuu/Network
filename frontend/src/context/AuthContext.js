@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../axios";
 import jwt_decode from "jwt-decode";
 
@@ -8,8 +9,19 @@ export default AuthContext;
 
 export const AuthProvider = ({children}) => {
 
-    let [authTokens, setAuthTokens] = useState(null);
-    let [user, setUser] = useState(null);
+    let authState = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
+    let id = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).user_id : null;
+    let username = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).username : null;
+    let image = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).image : null;
+
+    let [authTokens, setAuthTokens] = useState(() => authState);
+    let [user, setUser] = useState(() => localStorage.getItem("authTokens") ? {
+        "id": id,
+        "username": username,
+        "image": image,
+    } : null);
+
+    const navigate = useNavigate();
 
     let loginUser = async (e) => {
 
@@ -19,7 +31,7 @@ export const AuthProvider = ({children}) => {
             "Content-Type": "application/json"
         }
 
-        let response = await axios.post("/api/token/", {
+        await axios.post("/api/token/", {
             "username": e.target.parentNode.childNodes[1].value,
             "password": e.target.parentNode.childNodes[3].value
         }, {headers: headers})
@@ -30,15 +42,25 @@ export const AuthProvider = ({children}) => {
                 "username": jwt_decode(res.data.access).username,
                 "image": jwt_decode(res.data.access).image,
             });
+            localStorage.setItem("authTokens", JSON.stringify(res.data))
+            navigate("/");
         })
         .catch(e => {
             console.log(e.response);
         });
     }
 
+    let logoutUser = () => {
+        setAuthTokens(null);
+        setUser(null);
+        localStorage.removeItem("authTokens");
+        navigate("/");
+    }
+
     let contextData = {
         user:user,
-        loginUser:loginUser
+        loginUser:loginUser,
+        logoutUser:logoutUser
     }
 
     return (

@@ -9,10 +9,11 @@ import EmailIcon from '@mui/icons-material/Email';
 import LoginIcon from '@mui/icons-material/Login';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import AuthContext from '../context/AuthContext';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Nav = () => {
 
-    let {user} = useContext(AuthContext);
+    let {user, logoutUser} = useContext(AuthContext);
 
     return (
     <div className="nav">
@@ -59,15 +60,37 @@ const Nav = () => {
                 </div>
             </div>
             ): ("")}
+            {!user ? (
             <Link to="/login" style={{ textDecoration: 'none' }}>
-            <div className="nav__item">
+            <div className="nav__item" >
                 <LoginIcon fontSize="large" className="nav__itemImage"> 
                 </LoginIcon>
                 <div className="nav__itemText">
-                    <h3>{!user ? 'Guest - Login' : "Welcome - " + user.username}</h3>
+                    <h3>Login</h3>
                 </div>
             </div>
             </Link>
+            ): ("")}
+            {user ? (
+            <div className="nav__item">
+                <img src={user.image} className="nav__itemUserImage"> 
+                </img>
+                <div className="nav__itemText">
+                    <h3>{user.username}</h3>
+                </div>
+            </div>
+            ): ("")}
+            {user ? (
+            <Link to="/" style={{ textDecoration: 'none' }} onClick={logoutUser}>
+            <div className="nav__item">
+                <LogoutIcon fontSize="large" className="nav__itemImage"> 
+                </LogoutIcon>
+                <div className="nav__itemText">
+                    <h3>Logout</h3>
+                </div>
+            </div>
+            </Link>
+            ): ("")}
             <Link to="/login" style={{ textDecoration: 'none' }}>
             {!user ? (
             <div className="nav__item">
