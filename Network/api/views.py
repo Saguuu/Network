@@ -1,4 +1,5 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serilializers import PostSerializer, FollowSerializer, UserSerializer, siteUserSerializer
 from .models import Post, Follow, siteUser
@@ -52,6 +53,7 @@ def userList(request):
     return Response(serializer.data)
 
 @api_view(["GET"])
+#@permission_classes([IsAuthenticated])
 def postList(request):
 
     posts = Post.objects.all()

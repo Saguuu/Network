@@ -22,6 +22,7 @@ export const AuthProvider = ({children}) => {
     } : null);
 
     const navigate = useNavigate();
+    let [loading, setLoading] = useState(true);
 
     let loginUser = async (e) => {
 
@@ -57,11 +58,48 @@ export const AuthProvider = ({children}) => {
         navigate("/");
     }
 
+    let updateToken = async () => {
+        console.log("update token call");
+
+        const headers = {
+            "Content-Type": "application/json"
+        }
+
+        await axios.post("/api/token/refresh/", {
+            "refresh": authTokens?.refresh
+        }, {headers: headers})
+        .then(res => {
+            setAuthTokens(res.data);    
+            setUser({
+                "id": jwt_decode(res.data.access).user_id,
+                "username": jwt_decode(res.data.access).username,
+                "image": jwt_decode(res.data.access).image,
+            });
+            localStorage.setItem("authTokens", JSON.stringify(res.data))
+        })
+        .catch(e => {
+            console.log(e.response);
+            logoutUser();
+        });
+    }
+
     let contextData = {
         user:user,
+        authTokens:authTokens,
         loginUser:loginUser,
         logoutUser:logoutUser
     }
+
+    useEffect(() => {   
+
+        let interval = setInterval(() => {
+            if (authTokens) {
+                updateToken();
+            }
+        }, (1000 * 60 * 4))
+        return () => clearInterval(interval);
+
+    }, [authTokens, loading]);
 
     return (
         <AuthContext.Provider value={contextData}>

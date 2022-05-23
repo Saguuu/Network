@@ -9,9 +9,13 @@ const HomeFeed = () => {
 
     useEffect(() => {
         async function fetchPosts() {
-            const req = await axios.get("/api/post-list/");
-
-            setPosts(req.data);
+            await axios.get("/api/post-list/")
+            .then(res => {
+                setPosts(res.data);
+            })
+            .catch(e => {
+                console.log(e.response);
+            });
         }
 
         fetchPosts();
