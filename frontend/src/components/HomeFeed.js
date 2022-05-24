@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import "./HomeFeed.css";
 import axios from "../axios";
 import Post from './Post';
+import CreatePost from './CreatePost';
+import AuthContext from '../context/AuthContext';
 
 const HomeFeed = () => {
 
     const [posts, setPosts] = useState([]);
+    let {user} = useContext(AuthContext);
 
     useEffect(() => {
         async function fetchPosts() {
@@ -23,6 +26,9 @@ const HomeFeed = () => {
 
     return (
         <div className="homefeed">
+            {user ? (
+            <CreatePost />
+            ): null}
             {posts.map((post) => (
                 <Post 
                 image={ post.poster_image }

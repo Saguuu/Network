@@ -69,14 +69,14 @@ def postSingle(request, pk):
     return Response(serializer.data)
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def postCreate(request):
 
-    serializer = PostSerializer(data=request.data)
+    if len(request.data["content"]) <= 100 and len(request.data["content"]) > 0:
+        new_post = Post(poster=request.user.site_user, content=request.data["content"])
+        new_post.save()
 
-    if serializer.is_valid():
-        serializer.save()
-
-    return Response(serializer.data)
+    return Response("Post sent!")
 
 @api_view(["POST"])
 def postUpdate(request, pk):

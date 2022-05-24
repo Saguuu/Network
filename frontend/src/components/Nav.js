@@ -43,7 +43,7 @@ const Nav = () => {
                 </div>
             </div>
             </Link>
-            ): ("")}
+            ): null}
             {user ? (
             <div className="nav__item">
                 <EmailIcon fontSize="large" className="nav__itemImage"> 
@@ -52,7 +52,7 @@ const Nav = () => {
                     <h3>Messages</h3>
                 </div>
             </div>
-            ): ("")}
+            ): null}
             {user ? (
             <div className="nav__item">
                 <PersonIcon fontSize="large" className="nav__itemImage"> 
@@ -61,7 +61,7 @@ const Nav = () => {
                     <h3>Profile</h3>
                 </div>
             </div>
-            ): ("")}
+            ): null}
             {!user ? (
             <Link to="/login" style={{ textDecoration: 'none' }}>
             <div className="nav__item" >
@@ -72,7 +72,7 @@ const Nav = () => {
                 </div>
             </div>
             </Link>
-            ): ("")}
+            ): null}
             {user ? (
             <div className="nav__item">
                 <img src={user.image} className="nav__itemUserImage" alt=""> 
@@ -81,7 +81,7 @@ const Nav = () => {
                     <h3>{user.username}</h3>
                 </div>
             </div>
-            ): ("")}
+            ): null}
             {user ? (
             <Link to="/" style={{ textDecoration: 'none' }} onClick={logoutUser}>
             <div className="nav__item">
@@ -92,7 +92,7 @@ const Nav = () => {
                 </div>
             </div>
             </Link>
-            ): ("")}
+            ): null}
             <Link to="/login" style={{ textDecoration: 'none' }}>
             {!user ? (
             <div className="nav__item">
@@ -102,7 +102,7 @@ const Nav = () => {
                     <h3>Register</h3>
                 </div>
             </div>
-            ): ("")}
+            ): null}
             </Link>
         </div>
     </div>
