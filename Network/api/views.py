@@ -53,7 +53,6 @@ def userList(request):
     return Response(serializer.data)
 
 @api_view(["GET"])
-#@permission_classes([IsAuthenticated])
 def postList(request):
 
     posts = Post.objects.all()
@@ -99,6 +98,7 @@ def postDelete(request, pk):
     return Response("Post Deleted")
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def postFollowing(request, pk):
     
     # Query database for followed users, serialize data and convert to one dimensional list, then reverse sort by time created

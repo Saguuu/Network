@@ -34,6 +34,7 @@ const Nav = () => {
             </div>
             </Link>
             {user ? (
+                <Link to="/following" style={{ textDecoration: 'none' }}>
             <div className="nav__item">
                 <TagIcon fontSize="large" className="nav__itemImage"> 
                 </TagIcon>
@@ -41,6 +42,7 @@ const Nav = () => {
                     <h3>Following</h3>
                 </div>
             </div>
+            </Link>
             ): ("")}
             {user ? (
             <div className="nav__item">
@@ -73,7 +75,7 @@ const Nav = () => {
             ): ("")}
             {user ? (
             <div className="nav__item">
-                <img src={user.image} className="nav__itemUserImage"> 
+                <img src={user.image} className="nav__itemUserImage" alt=""> 
                 </img>
                 <div className="nav__itemText">
                     <h3>{user.username}</h3>

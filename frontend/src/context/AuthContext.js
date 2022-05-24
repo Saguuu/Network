@@ -19,10 +19,9 @@ export const AuthProvider = ({children}) => {
         "id": id,
         "username": username,
         "image": image,
-    } : null);
+    }: null);
 
     const navigate = useNavigate();
-    let [loading, setLoading] = useState(true);
 
     let loginUser = async (e) => {
 
@@ -66,7 +65,7 @@ export const AuthProvider = ({children}) => {
         }
 
         await axios.post("/api/token/refresh/", {
-            "refresh": authTokens?.refresh
+            "refresh": authTokens.refresh
         }, {headers: headers})
         .then(res => {
             setAuthTokens(res.data);    
@@ -90,7 +89,7 @@ export const AuthProvider = ({children}) => {
         logoutUser:logoutUser
     }
 
-    useEffect(() => {   
+    useEffect(() => {  
 
         let interval = setInterval(() => {
             if (authTokens) {
@@ -99,7 +98,7 @@ export const AuthProvider = ({children}) => {
         }, (1000 * 60 * 4))
         return () => clearInterval(interval);
 
-    }, [authTokens, loading]);
+    }, [authTokens]);
 
     return (
         <AuthContext.Provider value={contextData}>
