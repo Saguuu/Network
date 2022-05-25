@@ -20,6 +20,7 @@ export const AuthProvider = ({children}) => {
         "username": username,
         "image": image,
     }: null);
+    let [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -58,14 +59,14 @@ export const AuthProvider = ({children}) => {
     }
 
     let updateToken = async () => {
-        console.log("update token call");
+        console.log("update tokens");
 
         const headers = {
             "Content-Type": "application/json"
         }
 
         await axios.post("/api/token/refresh/", {
-            "refresh": authTokens.refresh
+            "refresh": authTokens?.refresh
         }, {headers: headers})
         .then(res => {
             setAuthTokens(res.data);    
@@ -77,9 +78,17 @@ export const AuthProvider = ({children}) => {
             localStorage.setItem("authTokens", JSON.stringify(res.data))
         })
         .catch(e => {
-            console.log(e.response);
-            logoutUser();
+            if(!(e.response.data.detail === "Token is blacklisted")) {
+                logoutUser();
+            }
+            else {
+                console.log(e.response);
+            }
         });
+
+        if(loading) {
+            setLoading(false);
+        }
     }
 
     let contextData = {
@@ -91,18 +100,22 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {  
 
+        if(loading) {
+            updateToken();
+        }
+
         let interval = setInterval(() => {
             if (authTokens) {
                 updateToken();
             }
-        }, (1000 * 60 * 3))
+        }, (1000 * 60 * 4));
         return () => clearInterval(interval);
 
-    }, [authTokens]);
+    }, [authTokens, loading]);
 
     return (
         <AuthContext.Provider value={contextData}>
-            {children}
+            {loading ? null : children}
         </AuthContext.Provider>
     );
 }
