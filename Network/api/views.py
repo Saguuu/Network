@@ -1,8 +1,9 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serilializers import PostSerializer, FollowSerializer, UserSerializer, siteUserSerializer
-from .models import Post, Follow, siteUser
+from django.contrib.auth.models import User
+from .serilializers import PostSerializer, FollowSerializer, UserSerializer, siteUserSerializer, LikeSerializer, CommentSerializer
+from .models import Post, Follow, siteUser, Like, Comment
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -31,6 +32,7 @@ def apiOverview(request):
         "Token Refresh": "/token/refresh/",
         "Post": "/post-list/",
         "User": "/user-list/",
+        "Single User": "/user-single/",
         "Followed By": "/followed-list/<str:pk>/",
         "Following": "/following-list/<str:pk>/",
         "Posts By Following": "/post-following/<str:pk>",
@@ -49,6 +51,14 @@ def userList(request):
 
     users = siteUser.objects.all()
     serializer = siteUserSerializer(users, many=True)
+
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def userSingle(request, pk):
+
+    user = siteUser.objects.get(id=pk)
+    serializer = siteUserSerializer(user, many=False)
 
     return Response(serializer.data)
 
