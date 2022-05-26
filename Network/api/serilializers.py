@@ -25,6 +25,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     poster = serializers.CharField(source="poster.user.username")
+    poster_id = serializers.IntegerField(source="poster.user.id")
     poster_image = serializers.CharField(source="poster.image")
     post_likes = LikeSerializer(many=True)
     post_comments = CommentSerializer(many=True)
