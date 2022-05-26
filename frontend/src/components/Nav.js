@@ -34,7 +34,7 @@ const Nav = () => {
             </div>
             </Link>
             {user ? (
-                <Link to="/following" style={{ textDecoration: 'none' }}>
+            <Link to="/following" style={{ textDecoration: 'none' }}>
             <div className="nav__item">
                 <TagIcon fontSize="large" className="nav__itemImage"> 
                 </TagIcon>
@@ -54,6 +54,7 @@ const Nav = () => {
             </div>
             ): null}
             {user ? (
+            <Link to={`/user/${user.id}`} style={{ textDecoration: 'none' }}>
             <div className="nav__item">
                 <PersonIcon fontSize="large" className="nav__itemImage"> 
                 </PersonIcon>
@@ -61,6 +62,7 @@ const Nav = () => {
                     <h3>Profile</h3>
                 </div>
             </div>
+            </Link>
             ): null}
             {!user ? (
             <Link to="/login" style={{ textDecoration: 'none' }}>
