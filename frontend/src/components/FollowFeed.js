@@ -37,8 +37,8 @@ const FollowFeed = () => {
                 poster={ post.poster }
                 date={ post.date }
                 key={ post.id }
-                content={ post.content}
-                likes={ post.likes } />  
+                content={ post.content }
+                likes={ post.post_likes.length } />  
             ))}
         </div>
     );

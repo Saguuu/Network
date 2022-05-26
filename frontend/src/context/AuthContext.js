@@ -79,6 +79,7 @@ export const AuthProvider = ({children}) => {
         })
         .catch(e => {
             if(!(e.response.data.detail === "Token is blacklisted")) {
+                console.log(e.response);
                 logoutUser();
             }
             else {
@@ -95,7 +96,8 @@ export const AuthProvider = ({children}) => {
         user:user,
         authTokens:authTokens,
         loginUser:loginUser,
-        logoutUser:logoutUser
+        logoutUser:logoutUser,
+        setUser:setUser
     }
 
     useEffect(() => {  
@@ -103,6 +105,26 @@ export const AuthProvider = ({children}) => {
         if(loading) {
             updateToken();
         }
+
+        async function fetchUserData() {
+            await axios.get(`/api/user-single/${user.id}/`)
+            .then(res => {
+                setUser(currentState => ({
+                    ...currentState,
+                    bio: res.data.bio,
+                    posts: res.data.user_posts,
+                    follows: res.data.user_follows,
+                    followed: res.data.user_followed,
+                    likes: res.data.user_likes,
+                    comments: res.data.user_comments
+                }));
+                console.log(res.data);
+            })
+            .catch(e => {
+                console.log(e.response);
+            });
+        }
+        fetchUserData();
 
         let interval = setInterval(() => {
             if (authTokens) {
