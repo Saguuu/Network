@@ -118,7 +118,6 @@ export const AuthProvider = ({children}) => {
                     likes: res.data.user_likes,
                     comments: res.data.user_comments
                 }));
-                console.log(res.data);
             })
             .catch(e => {
                 console.log(e.response);

@@ -3,6 +3,7 @@ import Login from "./components/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Following from "./components/Following";
+import Profile from "./components/Profile";
 
 function App() {
     return (
@@ -11,6 +12,7 @@ function App() {
               <AuthProvider>
                 <Routes>
                   <Route path="/login" element={<Login />}></Route>
+                  <Route path="/user/:userId" element={<Profile />} exact></Route>
                   <Route path="/following" element={<Following />}></Route>
                   <Route path="/" element={<Home />} exact></Route>
                 </Routes>

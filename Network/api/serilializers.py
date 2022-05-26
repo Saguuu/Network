@@ -39,6 +39,7 @@ class siteUserSerializer(serializers.ModelSerializer):
     user_followed = FollowSerializer(many=True)
     user_likes = LikeSerializer(many=True)
     user_comments = CommentSerializer(many=True)
+    username = serializers.CharField(source="user.username")
 
     class Meta:
         model = siteUser
