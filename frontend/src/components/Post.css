@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     border-bottom: solid 1px rgba(255,255,255,.25);
-    height: 100%;
     width: 100%;
     max-width: 30vw;
 }
@@ -32,6 +31,7 @@
     padding: .5vw;
     height: 3vw;
     width: 3vw;
+    object-fit: cover;
 }
 
 .post__headerName {
@@ -42,6 +42,7 @@
 .post__content {
     padding: .5vw;
     font-size: 1.5vw;
+    word-wrap: break-word;
 }
 
 .post__toolbar {
