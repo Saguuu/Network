@@ -12,6 +12,7 @@ urlpatterns = [
     path("", views.apiOverview, name="api-overview"),
     path("user-list/", views.userList, name="user-list"),
     path("user-single/<str:pk>/", views.userSingle, name="user-single"),
+    path("user-likes/<str:pk>/", views.userLikes, name="user-likes"),
     path("post-list/", views.postList, name="post-list"),
     path("post-single/<str:pk>/", views.postSingle, name="post-single"),
     path("post-following/<str:pk>/", views.postFollowing, name="post-following"),

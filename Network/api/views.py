@@ -33,6 +33,7 @@ def apiOverview(request):
         "Post": "/post-list/",
         "User": "/user-list/",
         "Single User": "/user-single/",
+        "User Likes": "/user-likes/<str:pk>",
         "Followed By": "/followed-list/<str:pk>/",
         "Following": "/following-list/<str:pk>/",
         "Posts By Following": "/post-following/<str:pk>",
@@ -61,6 +62,23 @@ def userSingle(request, pk):
     serializer = siteUserSerializer(user, many=False)
 
     return Response(serializer.data)
+
+@api_view(["GET"])
+def userLikes(request, pk):
+
+    response1 = []
+    likes = Like.objects.all().filter(liker=pk)
+
+    for i in likes:
+        response1.append(PostSerializer(Post.objects.all().filter(id=i.post.id), many=True).data)
+
+    response2 = []
+
+    for i in response1:
+        for j in i:
+            response2.append(j)
+
+    return Response(response2)
 
 @api_view(["GET"])
 def postList(request):
