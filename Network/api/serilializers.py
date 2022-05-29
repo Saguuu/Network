@@ -6,6 +6,8 @@ class FollowSerializer(serializers.ModelSerializer):
     image = serializers.CharField(source="followee.image")
     follower = serializers.CharField(source="follower.user.username")
     followee = serializers.CharField(source="followee.user.username")
+    follower_bio = serializers.CharField(source="follower.bio")
+    followee_bio = serializers.CharField(source="followee.bio")
 
     class Meta:
         model = Follow
