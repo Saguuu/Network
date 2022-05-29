@@ -3,6 +3,7 @@ import "./ProfileFeed.css";
 import Post from './Post';
 
 const ProfileFeed = ({ posts }) => {
+
     return (
         <div className="profilefeed">
             {posts?.map((post) => (
@@ -13,7 +14,7 @@ const ProfileFeed = ({ posts }) => {
                 key={ post.id }
                 id={ post.poster_id }
                 content={ post.content }
-                likes={ post.post_likes.length } />  
+                likes={ post.post_likes?.length } />  
             ))}
         </div>
     );
