@@ -1,0 +1,97 @@
+.profileheader {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    border-bottom: solid 1px rgba(255,255,255,.25);
+    border-left: solid 1px rgba(255,255,255,.25);
+    border-right: solid 1px rgba(255,255,255,.25);
+    width: 100%;
+}
+
+.profileheader__top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profileheader__topLeft {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+.profileheader__topLeftImage {
+    padding: .5vw;
+    height: 10vw;
+    width: 10vw;
+    object-fit: cover;
+    border-radius: 360px;
+}
+
+.profileheader__topLeftName {
+    word-wrap: break-word;
+}
+
+.profileheader__topRightFollow {
+    background: white;
+    border-color: #488ccc #488ccc #488ccc;
+    border-radius: 360px;
+    border: 1px solid;
+    color: #111;
+    width: 6vw;
+    height: 3vw;
+    font-size: 1vw;
+    margin-top: 1vw;
+    margin-right: 1vw;
+}
+
+.profileheader__topRightFollow:hover {
+    background-color: rgb(53, 97, 146);
+    cursor: pointer;
+}
+
+.profileheader__middleBio {
+    margin-left: 5px;
+    word-wrap: break-word;
+}
+
+.profileheader__bottom {
+    display: flex;
+    margin-left: 5px;
+    margin-top: 25px;
+    gap: 10px;
+}
+
+.profileheader__bottomOne:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.profileheader__bottomOneText {
+    color: grey;
+}
+
+.profileheader__bottomTwo:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.profileheader__bottomTwoText {
+    color: grey;
+}
+
+.profileheader__toolbar {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.profileheader__toolbarItem {
+    color: grey;
+    padding: 25px;
+    border-bottom: 5px white;
+}
+
+.profileheader__toolbarItem:hover {
+    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
