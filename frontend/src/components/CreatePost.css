@@ -16,6 +16,8 @@
 .createpost__image {
     width: 5vw;
     height: 5vw;
+    object-fit: cover;
+    border-radius: 360px;
 }
 
 .createpost__message {
