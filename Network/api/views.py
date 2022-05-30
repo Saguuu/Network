@@ -1,3 +1,4 @@
+from itsdangerous import Serializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -66,19 +67,15 @@ def userSingle(request, pk):
 @api_view(["GET"])
 def userLikes(request, pk):
 
-    response1 = []
+    response = []
     likes = Like.objects.all().filter(liker=pk)
 
     for i in likes:
-        response1.append(PostSerializer(Post.objects.all().filter(id=i.post.id), many=True).data)
+        response.append(Post.objects.get(id=i.post.id))
 
-    response2 = []
+    serializer = PostSerializer(response, many=True)
 
-    for i in response1:
-        for j in i:
-            response2.append(j)
-
-    return Response(response2)
+    return Response(serializer.data)
 
 @api_view(["GET"])
 def postList(request):
@@ -129,22 +126,12 @@ def postDelete(request, pk):
 @permission_classes([IsAuthenticated])
 def postFollowing(request, pk):
     
-    # Query database for followed users, serialize data and convert to one dimensional list, then reverse sort by time created
-    response1 = []
-    following = Follow.objects.all().filter(follower=pk)
+    following = Follow.objects.get(follower=pk)
 
-    for i in following:
-        response1.append(PostSerializer(Post.objects.all().filter(poster=i.followee), many=True).data)
+    posts = Post.objects.all().filter(poster=following.followee)
+    serializer = PostSerializer(posts, many=True)
 
-    response2 = []
-
-    for i in response1:
-        for j in i:
-            response2.append(j)
-    
-    response3 = sorted(response2, key=lambda d: d["id"], reverse=True)
-    
-    return Response(response3)
+    return Response(serializer.data)
 
 @api_view(["GET"])
 def followFollowedBy(request, pk):
