@@ -14,7 +14,7 @@ function App() {
                   <Route path="/login" element={<Login />}></Route>
                   <Route path="/user/:userId" element={<Profile />}></Route>
                   <Route path="/following" element={<Following />}></Route>
-                  <Route path="/" element={<Home />} exact></Route>
+                  <Route path="/" element={<Home />}></Route>
                 </Routes>
               </AuthProvider>
             </div>
