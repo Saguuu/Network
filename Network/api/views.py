@@ -123,15 +123,25 @@ def postDelete(request, pk):
     return Response("Post Deleted")
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def postFollowing(request, pk):
+#@permission_classes([IsAuthenticated])
+def postFollowing(request, pk):  
+
+    # Query database for followed users, serialize data and convert to one dimensional list, then reverse sort by time created
+    response1 = []
+    following = Follow.objects.all().filter(follower=pk)
+
+    for i in following:
+        response1.append(PostSerializer(Post.objects.all().filter(poster=i.followee), many=True).data)
+
+    response2 = []
+
+    for i in response1:
+        for j in i:
+            response2.append(j)
     
-    following = Follow.objects.get(follower=pk)
-
-    posts = Post.objects.all().filter(poster=following.followee)
-    serializer = PostSerializer(posts, many=True)
-
-    return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
+    response3 = sorted(response2, key=lambda d: d["id"], reverse=True)
+    
+    return Response(response3)
 
 @api_view(["GET"])
 def followFollowedBy(request, pk):
@@ -150,16 +160,22 @@ def followFollowing(request, pk):
     return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def followFollow(request):
 
-    serializer = FollowSerializer(data=request.data)
+    follower = siteUser.objects.get(id=request.data["follower"])
+    followee = siteUser.objects.get(id=request.data["followee"])
 
-    if serializer.is_valid():
-        serializer.save()
+    if (Follow.objects.filter(follower=follower, followee=followee).exists()) or (follower == followee):
+        return Response("failed")
 
-    return Response(serializer.data)
+    else : 
+        new_follow = Follow(follower=follower, followee=followee)
+        new_follow.save()
+        return Response("User followed")
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def followUnfollow(request):
     
     unfollow = Follow.objects.all().filter(follower=request.data.get("follower"), followee=request.data.get("followee"))
