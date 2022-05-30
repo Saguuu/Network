@@ -12,7 +12,7 @@ function App() {
               <AuthProvider>
                 <Routes>
                   <Route path="/login" element={<Login />}></Route>
-                  <Route path="/user/:userId" element={<Profile />} exact></Route>
+                  <Route path="/user/:userId" element={<Profile />}></Route>
                   <Route path="/following" element={<Following />}></Route>
                   <Route path="/" element={<Home />} exact></Route>
                 </Routes>
