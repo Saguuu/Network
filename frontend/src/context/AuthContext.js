@@ -106,7 +106,7 @@ export const AuthProvider = ({children}) => {
             updateToken();
         }
 
-        async function fetchUserData() {
+        let fetchUserData = async () => {
             await axios.get(`/api/user-single/${user.id}/`)
             .then(res => {
                 setUser(currentState => ({

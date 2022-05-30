@@ -2,7 +2,7 @@ import React from 'react';
 import "./UserFeedFollowing.css";
 import User from './User';
 
-const UserFeedFollowing = ({ users }) => {
+const UserFeedFollowing = ({ users, handleFollow }) => {
     return (
         <div className="userfeedfollowing">
             {users?.map((user) => (
@@ -12,6 +12,7 @@ const UserFeedFollowing = ({ users }) => {
             image={ user.followee_image }
             username={ user.followee }
             bio={ user.followee_bio }
+            handleFollow={ handleFollow }
             />
             ))}
         </div>

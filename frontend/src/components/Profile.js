@@ -17,7 +17,7 @@ const Profile = () => {
     const { userId } = useParams();
     let {user, authTokens, logoutUser} = useContext(AuthContext);
 
-    let handleClick = (e) => {
+    let handleFeed = (e) => {
 
         e.preventDefault();
 
@@ -54,6 +54,42 @@ const Profile = () => {
         console.log(e.target.textContent.toLowerCase());
     }
 
+    let handleFollow = (e) => {
+
+        console.log(user.id);
+        console.log(e.target.id);
+
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + String(authTokens.access)
+        }
+
+        let followUser = async () => {
+            await axios.post("/api/follow-follow/", {
+                "follower": user.id,
+                "followee": e.target.id
+            }, {headers: headers})
+            .then(res => {
+                console.log(res);
+                let fetchUserData = async () => {
+                    await axios.get(`/api/user-single/${profileUser.id}/`)
+                    .then(res => {
+                        setProfileUser(res.data);
+                    })
+                    .catch(e => {
+                        console.log(e.response);
+                    });
+                }
+                fetchUserData();
+            })
+            .catch(e => {
+                console.log(e.response);
+            })
+        }
+
+        followUser();
+    }
+
     useEffect(() => {
 
         setCurrentFeed({
@@ -62,8 +98,8 @@ const Profile = () => {
             following: false,
             followed: false
         });
-
-        async function fetchUserData() {
+        
+        let fetchUserData = async () => {
             await axios.get(`/api/user-single/${userId}/`)
             .then(res => {
                 setProfileUser(res.data);
@@ -73,7 +109,7 @@ const Profile = () => {
             });
         }
 
-        async function fetchUserLikes() {
+        let fetchUserLikes = async () => {
             await axios.get(`/api/user-likes/${userId}/`)
             .then(res => {
                 setProfileLikes(res.data);
@@ -94,13 +130,14 @@ const Profile = () => {
                 <Nav />
                 <div className="profile__content">
                     <ProfileHeader 
-                    userId={ profileUser.id}
-                    username={ profileUser.username}
-                    image={ profileUser.image}
-                    bio={ profileUser.bio}
-                    follows={ profileUser.user_follows?.length}
-                    followed={ profileUser.user_followed?.length}
-                    handleClick={handleClick}
+                    userId={ profileUser.id }
+                    username={ profileUser.username }
+                    image={ profileUser.image }
+                    bio={ profileUser.bio }
+                    follows={ profileUser.user_follows?.length }
+                    followed={ profileUser.user_followed?.length }
+                    handleFeed={ handleFeed }
+                    handleFollow={ handleFollow }
                     />
                     {currentFeed.posts ? (
                     <ProfileFeed 
@@ -115,11 +152,13 @@ const Profile = () => {
                     {currentFeed.following ? (
                     <UserFeedFollowing 
                     users={profileUser.user_follows?.map(user => (user))}
+                    handleFollow={ handleFollow }
                     />
                     ): null}
                     {currentFeed.followed ? (
                     <UserFeedFollowed 
                     users={profileUser.user_followed?.map(user => (user))}
+                    handleFollow={ handleFollow }
                     />
                     ): null}
                 </div>

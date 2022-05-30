@@ -10,7 +10,7 @@ const FollowFeed = () => {
     let {user, authTokens, logoutUser} = useContext(AuthContext);
 
     useEffect(() => {
-        async function fetchPosts() {
+        let fetchPosts = async () => {
             await axios.get(`/api/post-following/${user.id}/`, {
                 headers: {
                 "Content-Type": "application/json",

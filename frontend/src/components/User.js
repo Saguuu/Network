@@ -2,7 +2,7 @@ import React from 'react';
 import "./User.css";
 import { Link, } from 'react-router-dom';
 
-const User = ({ id, image, username, bio }) => {
+const User = ({ id, image, username, bio, handleFollow }) => {
     return (
         <div className="user">
             <div className="user__top">
@@ -13,7 +13,7 @@ const User = ({ id, image, username, bio }) => {
                 </div>
                 </Link>
                 <div className="user__topRight">
-                    <button className="user__topRightFollow">Follow</button>
+                    <button  id={id} className="user__topRightFollow" onClick={handleFollow}>Follow</button>
                 </div>
             </div>
             <div className="user__middle">
