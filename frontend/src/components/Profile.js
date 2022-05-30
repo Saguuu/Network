@@ -6,15 +6,62 @@ import axios from "../axios";
 import AuthContext from '../context/AuthContext';
 import ProfileFeed from './ProfileFeed';
 import ProfileHeader from './ProfileHeader';
+import UserFeedFollowing from './UserFeedFollowing';
+import UserFeedFollowed from './UserFeedFollowed';
 
 const Profile = () => {
 
     const [profileUser, setProfileUser] = useState([]);
     const [profileLikes, setProfileLikes] = useState([]);
+    const [currentFeed, setCurrentFeed] = useState([]);
     const { userId } = useParams();
     let {user, authTokens, logoutUser} = useContext(AuthContext);
 
+    let handleClick = (e) => {
+
+        e.preventDefault();
+
+        if (e.target.textContent.toLowerCase() === "posts") {
+            setCurrentFeed({
+                posts: true,
+                likes: false,
+                following: false,
+                followed: false
+            })
+        } else if (e.target.textContent.toLowerCase() === "likes") {
+            setCurrentFeed({
+                posts: false,
+                likes: true,
+                following: false,
+                followed: false
+            })
+        } else if (e.target.textContent.toLowerCase().trim() === "following") {
+            setCurrentFeed({
+                posts: false,
+                likes: false,
+                following: true,
+                followed: false
+            })
+        } else {
+            setCurrentFeed({
+                posts: false,
+                likes: false,
+                following: false,
+                followed: true
+            })
+        }
+
+        console.log(e.target.textContent.toLowerCase());
+    }
+
     useEffect(() => {
+
+        setCurrentFeed({
+            posts: true,
+            likes: false,
+            following: false,
+            followed: false
+        });
 
         async function fetchUserData() {
             await axios.get(`/api/user-single/${userId}/`)
@@ -39,7 +86,7 @@ const Profile = () => {
         fetchUserData();
         fetchUserLikes();
 
-    }, []);
+    }, [userId]);
 
     return (
         <div className="profile">
@@ -53,13 +100,28 @@ const Profile = () => {
                     bio={ profileUser.bio}
                     follows={ profileUser.user_follows?.length}
                     followed={ profileUser.user_followed?.length}
+                    handleClick={handleClick}
                     />
+                    {currentFeed.posts ? (
                     <ProfileFeed 
                     posts={ profileUser.user_posts?.map(post => (post)).reverse() }
                     />
+                    ): null}
+                    {currentFeed.likes ? (
                     <ProfileFeed 
                     posts={ profileLikes?.map(post => (post)).reverse() }
                     />
+                    ): null}
+                    {currentFeed.following ? (
+                    <UserFeedFollowing 
+                    users={profileUser.user_follows?.map(user => (user))}
+                    />
+                    ): null}
+                    {currentFeed.followed ? (
+                    <UserFeedFollowed 
+                    users={profileUser.user_followed?.map(user => (user))}
+                    />
+                    ): null}
                 </div>
             </div>
         </div>
