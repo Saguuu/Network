@@ -3,11 +3,14 @@ from .models import Post, siteUser, Follow, Like, Comment
 from django.contrib.auth.models import User
 
 class FollowSerializer(serializers.ModelSerializer):
-    image = serializers.CharField(source="followee.image")
     follower = serializers.CharField(source="follower.user.username")
-    followee = serializers.CharField(source="followee.user.username")
+    follower_image = serializers.CharField(source="follower.image")
     follower_bio = serializers.CharField(source="follower.bio")
+    follower_id = serializers.IntegerField(source="follower.user.id")
+    followee = serializers.CharField(source="followee.user.username")
+    followee_image = serializers.CharField(source="followee.image")
     followee_bio = serializers.CharField(source="followee.bio")
+    followee_id = serializers.IntegerField(source="followee.user.id")
 
     class Meta:
         model = Follow
