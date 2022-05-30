@@ -131,7 +131,7 @@ def postFollowing(request, pk):
     posts = Post.objects.all().filter(poster=following.followee)
     serializer = PostSerializer(posts, many=True)
 
-    return Response(serializer.data)
+    return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
 
 @api_view(["GET"])
 def followFollowedBy(request, pk):
