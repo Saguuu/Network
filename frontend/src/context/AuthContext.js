@@ -71,6 +71,7 @@ export const AuthProvider = ({children}) => {
         .then(res => {
             setAuthTokens(res.data);    
             setUser({
+                ...user,
                 "id": jwt_decode(res.data.access).user_id,
                 "username": jwt_decode(res.data.access).username,
                 "image": jwt_decode(res.data.access).image,
@@ -86,10 +87,6 @@ export const AuthProvider = ({children}) => {
                 console.log(e.response);
             }
         });
-
-        if(loading) {
-            setLoading(false);
-        }
     }
 
     let contextData = {
@@ -118,6 +115,7 @@ export const AuthProvider = ({children}) => {
                     likes: res.data.user_likes,
                     comments: res.data.user_comments
                 }));
+                setLoading(false);
             })
             .catch(e => {
                 console.log(e.response);
@@ -132,7 +130,7 @@ export const AuthProvider = ({children}) => {
         }, (1000 * 60 * 4));
         return () => clearInterval(interval);
 
-    }, [authTokens, loading]);
+    }, []);
 
     return (
         <AuthContext.Provider value={contextData}>
