@@ -10,7 +10,7 @@ const User = ({ id, image, username, bio, handleFollow }) => {
 
     if (user) {
         for (let i = 0; i < user.follows.length; i++) {
-            if (user.follows[i]["id"] === id) {
+            if (user.follows[i]["followee_id"] === id) {
                 isFollowing = true;
             }
         }
@@ -26,7 +26,7 @@ const User = ({ id, image, username, bio, handleFollow }) => {
                 </div>
                 </Link>
                 <div className="user__topRight">
-                    {isFollowing ? (
+                    {!isFollowing ? (
                     <button id={id} className="user__topRightButtonFollow" onClick={handleFollow}>Follow</button>
                     ) : (
                     <button id={id} className="user__topRightButtonUnfollow" onClick={handleFollow}>Unfollow</button>
