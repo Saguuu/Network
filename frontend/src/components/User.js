@@ -5,8 +5,14 @@ import AuthContext from '../context/AuthContext';
 
 const User = ({ id, image, username, bio, handleFollow }) => {
 
-    let {user, authTokens, logoutUser} = useContext(AuthContext);
+    let {user} = useContext(AuthContext);
     let isFollowing = false;
+
+    let isCurrentUser = false;
+
+    if (id === user.id) {
+        isCurrentUser = true;
+    }
 
     if (user) {
         for (let i = 0; i < user.follows.length; i++) {
@@ -25,6 +31,7 @@ const User = ({ id, image, username, bio, handleFollow }) => {
                     <p className="user__topLeftName">{username}</p>
                 </div>
                 </Link>
+                {!isCurrentUser ? (
                 <div className="user__topRight">
                     {!isFollowing ? (
                     <button id={id} className="user__topRightButtonFollow" onClick={handleFollow}>Follow</button>
@@ -32,6 +39,7 @@ const User = ({ id, image, username, bio, handleFollow }) => {
                     <button id={id} className="user__topRightButtonUnfollow" onClick={handleFollow}>Unfollow</button>
                     )}
                 </div>
+                ): null}
             </div>
             <div className="user__middle">
                 <p>{bio}</p>
