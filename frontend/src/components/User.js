@@ -10,11 +10,10 @@ const User = ({ id, image, username, bio, handleFollow }) => {
 
     let isCurrentUser = false;
 
-    if (id === user.id) {
-        isCurrentUser = true;
-    }
-
     if (user) {
+        if (id === user.id) {
+            isCurrentUser = true;
+        }
         for (let i = 0; i < user.follows.length; i++) {
             if (user.follows[i]["followee_id"] === id) {
                 isFollowing = true;

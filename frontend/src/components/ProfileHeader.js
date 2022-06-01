@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import "./ProfileHeader.css";
+import AuthContext from '../context/AuthContext';
 
-const ProfileHeader = ({ user, userId, username, image, bio, follows, followed, handleFeed, handleFollow }) => {
+const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow }) => {
 
-    let isCurrentUser = false;
+    let {user} = useContext(AuthContext);
     let isFollowing = false;
+    let isCurrentUser = false;
 
-    if (userId === user.id) {
-        isCurrentUser = true;
-    } else {
+    if (user) {
+        if (userId === user.id) {
+            isCurrentUser = true;
+        }
         for (let i = 0; i < user.follows.length; i++) {
             if (user.follows[i]["followee_id"] === userId) {
                 isFollowing = true;
@@ -31,7 +34,7 @@ const ProfileHeader = ({ user, userId, username, image, bio, follows, followed, 
                         <button id={userId} className="profileheader__topRightButtonUnfollow" onClick={handleFollow}>Unfollow</button>
                     ): null}
                     {!isCurrentUser && !isFollowing ? (
-                    <button id={userId} className="profileheader__topRightButtonButton" onClick={handleFollow}>Follow</button>
+                    <button id={userId} className="profileheader__topRightButton" onClick={handleFollow}>Follow</button>
                     ): null}
                 </div>
             </div>

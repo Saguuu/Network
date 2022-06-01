@@ -71,7 +71,7 @@ const Profile = () => {
             }, {headers: headers})
             .then(res => {
                 console.log(res);
-                let fetchUserData = async () => {
+                let fetchProfileUserData = async () => {
                     await axios.get(`/api/user-single/${profileUser.id}/`)
                     .then(res => {
                         setProfileUser(res.data);
@@ -80,7 +80,7 @@ const Profile = () => {
                         console.log(e.response);
                     });
                 }
-                fetchUserData();
+                fetchProfileUserData();
             })
             .catch(e => {
                 console.log(e.response);
@@ -99,7 +99,7 @@ const Profile = () => {
             followed: false
         });
         
-        let fetchUserData = async () => {
+        let fetchProfileUserData = async () => {
             await axios.get(`/api/user-single/${userId}/`)
             .then(res => {
                 setProfileUser(res.data);
@@ -109,7 +109,7 @@ const Profile = () => {
             });
         }
 
-        let fetchUserLikes = async () => {
+        let fetchProfileUserLikes = async () => {
             await axios.get(`/api/user-likes/${userId}/`)
             .then(res => {
                 setProfileLikes(res.data);
@@ -119,8 +119,8 @@ const Profile = () => {
             });
         }
 
-        fetchUserData();
-        fetchUserLikes();
+        fetchProfileUserData();
+        fetchProfileUserLikes();
 
     }, [userId]);
 
@@ -138,7 +138,6 @@ const Profile = () => {
                     followed={ profileUser.user_followed?.length }
                     handleFeed={ handleFeed }
                     handleFollow={ handleFollow }
-                    user={ user }
                     />
                     {currentFeed.posts ? (
                     <ProfileFeed 

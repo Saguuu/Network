@@ -24,7 +24,7 @@ export const AuthProvider = ({children}) => {
 
     const navigate = useNavigate();
 
-    let loginUser = async (e) => {
+    let loginUser = (e) => {
 
         e.preventDefault();
 
@@ -32,26 +32,33 @@ export const AuthProvider = ({children}) => {
             "Content-Type": "application/json"
         }
 
-        await axios.post("/api/token/", {
-            "username": e.target.parentNode.childNodes[1].value,
-            "password": e.target.parentNode.childNodes[3].value
-        }, {headers: headers})
-        .then(res => {
-            setAuthTokens(res.data);    
-            setUser({
-                "id": jwt_decode(res.data.access).user_id,
-                "username": jwt_decode(res.data.access).username,
-                "image": jwt_decode(res.data.access).image,
+        let verify = async () => {
+            await axios.post("/api/token/", {
+                "username": e.target.parentNode.childNodes[1].value,
+                "password": e.target.parentNode.childNodes[3].value
+            }, {headers: headers})
+            .then(res => {
+                setAuthTokens(res.data);    
+                setUser({
+                    "id": jwt_decode(res.data.access).user_id,
+                    "username": jwt_decode(res.data.access).username,
+                    "image": jwt_decode(res.data.access).image,
+                });
+                localStorage.setItem("authTokens", JSON.stringify(res.data))
+                setLoading(true);
+                navigate("/");
+            })
+            .catch(e => {
+                console.log(e.response);
             });
-            localStorage.setItem("authTokens", JSON.stringify(res.data))
-            navigate("/");
-        })
-        .catch(e => {
-            console.log(e.response);
-        });
+        }
+        verify();
     }
 
     let logoutUser = () => {
+
+        // Remove user data from locale storage, log out and redirect
+        
         setAuthTokens(null);
         setUser(null);
         localStorage.removeItem("authTokens");
@@ -65,27 +72,49 @@ export const AuthProvider = ({children}) => {
             "Content-Type": "application/json"
         }
 
-        await axios.post("/api/token/refresh/", {
-            "refresh": authTokens?.refresh
-        }, {headers: headers})
-        .then(res => {
-            setAuthTokens(res.data);    
-            setUser({
-                ...user,
-                "id": jwt_decode(res.data.access).user_id,
-                "username": jwt_decode(res.data.access).username,
-                "image": jwt_decode(res.data.access).image,
+        if (authTokens) {
+            await axios.post("/api/token/refresh/", {
+                "refresh": authTokens?.refresh
+            }, {headers: headers})
+            .then(res => {
+                setAuthTokens(res.data);    
+                setUser({
+                    ...user,
+                    "id": jwt_decode(res.data.access).user_id,
+                    "username": jwt_decode(res.data.access).username,
+                    "image": jwt_decode(res.data.access).image,
+                });
+                localStorage.setItem("authTokens", JSON.stringify(res.data))
+            })
+            .catch(e => {
+                if(!(e.response.data.detail === "Token is blacklisted")) {
+                    console.log(e.response);
+                    logoutUser();
+                }
+                else {
+                    console.log(e.response);
+                }
             });
-            localStorage.setItem("authTokens", JSON.stringify(res.data))
+        }
+    }
+
+    let fetchUserData = async () => {
+        await axios.get(`/api/user-single/${user?.id}/`)
+        .then(res => {
+            setUser(currentState => ({
+                ...currentState,
+                bio: res.data.bio,
+                posts: res.data.user_posts,
+                follows: res.data.user_follows,
+                followed: res.data.user_followed,
+                likes: res.data.user_likes,
+                comments: res.data.user_comments
+            }));
+            setLoading(false);
         })
         .catch(e => {
-            if(!(e.response.data.detail === "Token is blacklisted")) {
-                console.log(e.response);
-                logoutUser();
-            }
-            else {
-                console.log(e.response);
-            }
+            console.log(e.response);
+            setLoading(false);
         });
     }
 
@@ -94,34 +123,20 @@ export const AuthProvider = ({children}) => {
         authTokens:authTokens,
         loginUser:loginUser,
         logoutUser:logoutUser,
-        setUser:setUser
+        setUser:setUser,
     }
 
-    useEffect(() => {  
+    useEffect(() => { 
 
         if(loading) {
             updateToken();
         }
 
-        let fetchUserData = async () => {
-            await axios.get(`/api/user-single/${user.id}/`)
-            .then(res => {
-                setUser(currentState => ({
-                    ...currentState,
-                    bio: res.data.bio,
-                    posts: res.data.user_posts,
-                    follows: res.data.user_follows,
-                    followed: res.data.user_followed,
-                    likes: res.data.user_likes,
-                    comments: res.data.user_comments
-                }));
-                setLoading(false);
-            })
-            .catch(e => {
-                console.log(e.response);
-            });
-        }
         fetchUserData();
+
+    }, [loading]);
+
+    useEffect(() => {  
 
         let interval = setInterval(() => {
             if (authTokens) {
@@ -130,7 +145,7 @@ export const AuthProvider = ({children}) => {
         }, (1000 * 60 * 4));
         return () => clearInterval(interval);
 
-    }, []);
+    }, [authTokens, loading]);
 
     return (
         <AuthContext.Provider value={contextData}>
