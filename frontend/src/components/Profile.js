@@ -138,6 +138,7 @@ const Profile = () => {
                     followed={ profileUser.user_followed?.length }
                     handleFeed={ handleFeed }
                     handleFollow={ handleFollow }
+                    user={ user }
                     />
                     {currentFeed.posts ? (
                     <ProfileFeed 

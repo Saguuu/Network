@@ -27,8 +27,8 @@
     object-fit: cover;
 }
 
-.user__topRightFollow {
-    background: white;
+.user__topRightButtonFollow {
+    background-color: white;
     border-color: #488ccc #488ccc #488ccc;
     border-radius: 360px;
     border: 1px solid;
@@ -40,8 +40,27 @@
     margin-right: 1vw;
 }
 
-.user__topRightFollow:hover {
+.user__topRightButtonFollow:hover {
     background-color: rgb(53, 97, 146);
+    cursor: pointer;
+}
+
+.user__topRightButtonUnfollow {
+    background-color: rgb(53, 97, 146);
+    border-color: #488ccc #488ccc #488ccc;
+    border-radius: 360px;
+    border: 1px solid;
+    color: white;
+    width: 4vw;
+    height: 2vw;
+    font-size: .8vw;
+    margin-top: 1vw;
+    margin-right: 1vw;
+}
+
+.user__topRightButtonUnfollow:hover {
+    background-color: white;
+    color: red;
     cursor: pointer;
 }
 
