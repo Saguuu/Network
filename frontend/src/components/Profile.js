@@ -15,7 +15,7 @@ const Profile = () => {
     const [profileLikes, setProfileLikes] = useState([]);
     const [currentFeed, setCurrentFeed] = useState([]);
     const { userId } = useParams();
-    let {user, authTokens, logoutUser} = useContext(AuthContext);
+    let {user, authTokens, logoutUser, fetchUserData} = useContext(AuthContext);
 
     let handleFeed = (e) => {
 
@@ -56,9 +56,6 @@ const Profile = () => {
 
     let handleFollow = (e) => {
 
-        console.log(user.id);
-        console.log(e.target.id);
-
         const headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + String(authTokens.access)
@@ -81,13 +78,42 @@ const Profile = () => {
                     });
                 }
                 fetchProfileUserData();
+                fetchUserData();
             })
             .catch(e => {
                 console.log(e.response);
             })
         }
 
-        followUser();
+        let unfollowUser = async () => {
+            await axios.post("/api/follow-unfollow/", {
+                "follower": user.id,
+                "followee": e.target.id
+            }, {headers: headers})
+            .then(res => {
+                console.log(res);
+                let fetchProfileUserData = async () => {
+                    await axios.get(`/api/user-single/${profileUser.id}/`)
+                    .then(res => {
+                        setProfileUser(res.data);
+                    })
+                    .catch(e => {
+                        console.log(e.response);
+                    });
+                }
+                fetchProfileUserData();
+                fetchUserData();
+            })
+            .catch(e => {
+                console.log(e.response);
+            })
+        }
+
+        if (e.target.textContent === "Follow") {
+            followUser();
+        } else {
+            unfollowUser();
+        }
     }
 
     useEffect(() => {
@@ -151,13 +177,13 @@ const Profile = () => {
                     ): null}
                     {currentFeed.following ? (
                     <UserFeedFollowing 
-                    users={profileUser.user_follows?.map(user => (user))}
+                    users={ profileUser.user_follows?.map(user => (user)).reverse() }
                     handleFollow={ handleFollow }
                     />
                     ): null}
                     {currentFeed.followed ? (
                     <UserFeedFollowed 
-                    users={profileUser.user_followed?.map(user => (user))}
+                    users={ profileUser.user_followed?.map(user => (user)).reverse() }
                     handleFollow={ handleFollow }
                     />
                     ): null}

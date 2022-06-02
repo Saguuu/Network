@@ -78,12 +78,12 @@ export const AuthProvider = ({children}) => {
             }, {headers: headers})
             .then(res => {
                 setAuthTokens(res.data);    
-                setUser({
+                setUser((user) => ({
                     ...user,
-                    "id": jwt_decode(res.data.access).user_id,
-                    "username": jwt_decode(res.data.access).username,
-                    "image": jwt_decode(res.data.access).image,
-                });
+                    id: jwt_decode(res.data.access).user_id,
+                    username: jwt_decode(res.data.access).username,
+                    image: jwt_decode(res.data.access).image,
+                }));
                 localStorage.setItem("authTokens", JSON.stringify(res.data))
             })
             .catch(e => {
@@ -101,8 +101,8 @@ export const AuthProvider = ({children}) => {
     let fetchUserData = async () => {
         await axios.get(`/api/user-single/${user?.id}/`)
         .then(res => {
-            setUser(currentState => ({
-                ...currentState,
+            setUser((user) => ({
+                ...user,
                 bio: res.data.bio,
                 posts: res.data.user_posts,
                 follows: res.data.user_follows,
@@ -124,6 +124,7 @@ export const AuthProvider = ({children}) => {
         loginUser:loginUser,
         logoutUser:logoutUser,
         setUser:setUser,
+        fetchUserData:fetchUserData
     }
 
     useEffect(() => { 
@@ -145,7 +146,7 @@ export const AuthProvider = ({children}) => {
         }, (1000 * 60 * 4));
         return () => clearInterval(interval);
 
-    }, [authTokens, loading]);
+    }, [authTokens]);
 
     return (
         <AuthContext.Provider value={contextData}>
