@@ -41,8 +41,8 @@ def apiOverview(request):
         "Create Post": "/post-create/",
         "Update Post": "/post-update/<str:pk>/",
         "Delete Post": "/post-delete/<str:pk>/",
-        "Follow User": "/follow-user/",
-        "Unfollow User": "/unfollow-user/"
+        "Follow User": "/follow-follow/",
+        "Unfollow User": "/follow-unfollow/"
     }
 
     return Response(api_urls)  
