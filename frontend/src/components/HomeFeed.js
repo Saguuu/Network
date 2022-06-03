@@ -22,7 +22,7 @@ const HomeFeed = () => {
         }
 
         fetchPosts();
-    }, [])
+    }, [user])
 
     return (
         <div className="homefeed">
@@ -35,7 +35,8 @@ const HomeFeed = () => {
                 poster={ post.poster }
                 date={ post.date }
                 key={ post.id }
-                id={ post.poster_id }
+                id={ post.id }
+                userId={ post.poster_id }
                 content={ post.content }
                 likes={ post.post_likes.length } />  
             ))}
