@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import "./Profile.css";
 import Nav from './Nav';
 import axios from "../axios";
@@ -13,9 +13,16 @@ const Profile = () => {
 
     const [profileUser, setProfileUser] = useState([]);
     const [profileLikes, setProfileLikes] = useState([]);
-    const [currentFeed, setCurrentFeed] = useState([]);
+    const [currentFeed, setCurrentFeed] = useState({
+        posts: true,
+        likes: false,
+        following: false,
+        followed: false
+    });
     const { userId } = useParams();
     let {user, authTokens, logoutUser, fetchUserData} = useContext(AuthContext);
+    const location = useLocation();
+    const data = location.state;
 
     let handleFeed = (e) => {
 
@@ -82,7 +89,7 @@ const Profile = () => {
             })
             .catch(e => {
                 console.log(e.response);
-            })
+            });
         }
 
         let unfollowUser = async () => {
@@ -106,7 +113,7 @@ const Profile = () => {
             })
             .catch(e => {
                 console.log(e.response);
-            })
+            });
         }
 
         if (e.target.textContent === "Follow") {
@@ -118,12 +125,17 @@ const Profile = () => {
 
     useEffect(() => {
 
-        setCurrentFeed({
-            posts: true,
-            likes: false,
-            following: false,
-            followed: false
-        });
+        if (data?.fromPost) {
+            setCurrentFeed((currentFeed) => ({
+                ...currentFeed,
+                posts: true
+            }));
+            data.fromPost = false;
+        } else {
+            setCurrentFeed((currentFeed) => ({
+                ...currentFeed
+            }));
+        }
         
         let fetchProfileUserData = async () => {
             await axios.get(`/api/user-single/${userId}/`)
@@ -148,7 +160,7 @@ const Profile = () => {
         fetchProfileUserData();
         fetchProfileUserLikes();
 
-    }, [userId]);
+    }, [userId, user]);
 
     return (
         <div className="profile">
