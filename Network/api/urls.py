@@ -22,5 +22,7 @@ urlpatterns = [
     path("followed-list/<str:pk>/", views.followFollowedBy, name="followed-list"),
     path("following-list/<str:pk>/", views.followFollowing, name="following-list"),
     path("follow-follow/", views.followFollow, name="follow-follow"),
-    path("follow-unfollow/", views.followUnfollow, name="follow-unfollow")
+    path("follow-unfollow/", views.followUnfollow, name="follow-unfollow"),
+    path("like-like/", views.likeLike, name="like-like"),
+    path("like-unlike/", views.likeUnlike, name="like-unlike")
 ]

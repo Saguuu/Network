@@ -42,7 +42,9 @@ def apiOverview(request):
         "Update Post": "/post-update/<str:pk>/",
         "Delete Post": "/post-delete/<str:pk>/",
         "Follow User": "/follow-follow/",
-        "Unfollow User": "/follow-unfollow/"
+        "Unfollow User": "/follow-unfollow/",
+        "Like post": "/like-like",
+        "Unlike post": "/like-unlike"
     }
 
     return Response(api_urls)  
@@ -181,3 +183,27 @@ def followUnfollow(request):
     unfollow.delete()
 
     return Response("User Unfollowed")
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def likeLike(request):
+    
+    liker = siteUser.objects.get(id=request.data["liker"])
+    post = Post.objects.get(id=request.data["post"])
+
+    if (Like.objects.filter(liker=liker, post=post).exists()):
+        return Response("failed")
+
+    else : 
+        new_like = Like(liker=liker, post=post)
+        new_like.save()
+        return Response("Post liked")
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def likeUnlike(request):
+    
+    unlike = Like.objects.all().filter(liker=request.data.get("liker"), post=Post.objects.get(id=request.data["post"]))
+    unlike.delete()
+
+    return Response("Post unliked")
