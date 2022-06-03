@@ -54,3 +54,17 @@
     padding: .5vw;
     gap: 3px;
 }
+
+.post__toolbarLikesHeart:hover {
+    color:pink;
+    cursor: pointer;
+}
+
+.post__toolbarLikesHeartLiked {
+    color: pink;
+}
+
+.post__toolbarLikesHeartLiked:hover {
+    opacity: .3;
+    cursor: pointer;
+}
