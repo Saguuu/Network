@@ -182,7 +182,7 @@ const Profile = () => {
                     ): null}
                     {currentFeed.likes ? (
                     <ProfileFeed 
-                    posts={ profileLikes?.map(post => (post)).reverse() }
+                    posts={ profileLikes?.map(post => (post)) }
                     />
                     ): null}
                     {currentFeed.following ? (
