@@ -57,8 +57,6 @@ const Profile = () => {
                 followed: true
             })
         }
-
-        console.log(e.target.textContent.toLowerCase());
     }
 
     let handleFollow = (e) => {
