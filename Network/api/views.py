@@ -69,7 +69,7 @@ def userSingle(request, pk):
 def userLikes(request, pk):
 
     response = []
-    likes = Like.objects.all().filter(liker=pk)
+    likes = Like.objects.all().filter(liker=pk).order_by("-id")
 
     for i in likes:
         response.append(Post.objects.get(id=i.post.id))
