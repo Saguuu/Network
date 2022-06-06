@@ -1,3 +1,4 @@
+from imp import source_from_cache
 from rest_framework import serializers
 from .models import Post, siteUser, Follow, Like, Comment
 from django.contrib.auth.models import User
@@ -23,6 +24,9 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class CommentSerializer(serializers.ModelSerializer):
+    commenter_username = serializers.CharField(source="poster.user.username")
+    commenter_image = serializers.CharField(source="poster.image")
+    commenter_id = serializers.IntegerField(source="poster.user.id")
     
     class Meta:
         model = Comment
