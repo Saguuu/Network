@@ -1,0 +1,43 @@
+.comment {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment__top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment__topLeft {
+    display: flex;
+    align-items: center;
+    gap: .5vw;
+}
+
+.comment__topRight {
+    display: flex;
+}
+
+.comment__topRight > p {
+    font-size: 1vw;
+    padding: .5vw;
+}
+
+.comment__topLeftImage {
+    height: 2vw;
+    width: 2vw;
+    border-radius: 360px;
+    object-fit: cover;
+}
+
+.comment__topLeftName {
+    color: white;
+    font-size: 1vw;
+}
+
+.comment__middle {
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+    word-wrap: break-word;
+    font-size: 1vw;
+}
