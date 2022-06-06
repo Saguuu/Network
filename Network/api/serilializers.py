@@ -26,7 +26,6 @@ class LikeSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     commenter_username = serializers.CharField(source="poster.user.username")
     commenter_image = serializers.CharField(source="poster.image")
-    commenter_id = serializers.IntegerField(source="poster.user.id")
     
     class Meta:
         model = Comment
