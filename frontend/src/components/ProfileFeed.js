@@ -15,7 +15,8 @@ const ProfileFeed = ({ posts }) => {
                 id={ post.id }
                 userId={ post.poster_id }
                 content={ post.content }
-                likes={ post.post_likes?.length } />  
+                likes={ post.post_likes?.length }
+                comments={ post.post_comments } />  
             ))}
         </div>
     );
