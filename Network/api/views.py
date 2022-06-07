@@ -1,3 +1,4 @@
+import re
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -36,15 +37,18 @@ def apiOverview(request):
         "User Likes": "/user-likes/<str:pk>",
         "Followed By": "/followed-list/<str:pk>/",
         "Following": "/following-list/<str:pk>/",
-        "Posts By Following": "/post-following/<str:pk>",
+        "Posts By Following": "/post-following/<str:pk>/",
         "Single Post": "/post-single/<str:pk>/",
         "Create Post": "/post-create/",
         "Update Post": "/post-update/<str:pk>/",
         "Delete Post": "/post-delete/<str:pk>/",
         "Follow User": "/follow-follow/",
         "Unfollow User": "/follow-unfollow/",
-        "Like post": "/like-like",
-        "Unlike post": "/like-unlike"
+        "Like post": "/like-like/",
+        "Unlike post": "/like-unlike/",
+        "Comment On Post": "/comment-comment/",
+        "Uncomment On Post": "/comment-uncomment/",
+        "Get Last User Comment": "/comment-last/<str:pk>/"
     }
 
     return Response(api_urls)  
@@ -207,3 +211,33 @@ def likeUnlike(request):
     unlike.delete()
 
     return Response("Post unliked")
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def commentComment(request):
+    
+    commenter = siteUser.objects.get(id=request.data["commenter"])
+    post = Post.objects.get(id=request.data["post"])
+    content = request.data["content"]
+
+    new_comment = Comment(poster=commenter, post=post, content=content)
+    new_comment.save()
+    return Response("Post liked")
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def commentUncomment(request):
+    
+    un_comment = Comment.objects.get(id=request.data["id"])
+    un_comment.delete()
+
+    return Response("Post unliked")
+
+@api_view(["GET"])
+def commentGetLastComment(request, pk):
+    
+    last_comment = Comment.objects.all().filter(poster=pk).last()
+
+    serializer = CommentSerializer(last_comment, many=False)
+
+    return Response(serializer.data)
