@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./Post.css";
 import Comment from './Comment';
+import CreateComment from './CreateComment';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import CommentIcon from '@mui/icons-material/Comment';
@@ -67,7 +68,6 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments }) => 
         .catch(e => {
             console.log(e.response);
         });
-
     }
 
     let unLike = async (e) => {
@@ -104,7 +104,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments }) => 
 
         setPostComments(comments);  
 
-    }, [setPostComments])
+    }, [setPostComments]);
 
     return (
         <div className="post">
@@ -146,6 +146,12 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments }) => 
             </div>
             {showComments ? ( 
             <div className="post__comments">
+                {user ? (
+                <CreateComment
+                postId={ id } 
+                setPostComments={ setPostComments }
+                />
+                ): null}
                 {postComments.map((comment) => (
                     <Comment 
                     id={ comment.id }
