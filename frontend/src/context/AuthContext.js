@@ -103,6 +103,7 @@ export const AuthProvider = ({children}) => {
         .then(res => {
             setUser((user) => ({
                 ...user,
+                image: res.data.image,
                 bio: res.data.bio,
                 posts: res.data.user_posts,
                 follows: res.data.user_follows,

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, } from 'react-router-dom';
 import "./Nav.css";
 import HomeIcon from '@mui/icons-material/Home';
@@ -14,6 +14,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 const Nav = () => {
 
     let {user, logoutUser} = useContext(AuthContext);
+
+    useEffect(() => {
+
+    },[user]);
 
     return (
     <div className="nav">
