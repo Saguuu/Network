@@ -1,0 +1,90 @@
+.modal {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    justify-content: space-between;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    padding: 1vw;
+    z-index: 1000;
+    border-radius: 20px;
+    border: solid 1px white;
+    height: 50vw;
+    width: 35vw;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: grey;
+    z-index: 1000;
+    opacity: .5;
+}
+
+.modal__bio {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.modal__bio > textarea {
+    background-color: rgb(34, 33, 33);
+    border: none;
+    outline: none;
+    resize: none;
+    word-wrap: break-word;
+    overflow: auto;
+    color: white;
+    width: 100%;
+    height: 25vw;
+}
+
+.modal__image > textarea {
+    background-color: rgb(34, 33, 33);
+    border: none;
+    outline: none;
+    resize: none;
+    word-wrap: break-word;
+    overflow: auto;
+    color: white;
+    width: 100%;
+    height: 5vw;
+}
+
+.modal__buttonClose {
+    width: 5vw;
+    height: 2vw;
+    border-radius: 10px;
+}
+
+.modal__buttonClose:hover {
+    cursor: pointer;
+    background-color: grey;
+}
+
+.modal__image {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.modal__bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal__buttonSave {
+    width: 5vw;
+    height: 2vw;
+    border-radius: 10px;
+}
+
+.modal__buttonSave:hover {
+    cursor: pointer;
+    background-color: grey;
+}
