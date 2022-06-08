@@ -16,7 +16,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
-        token['image'] = user.site_user.image
         # ...
 
         return token
