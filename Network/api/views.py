@@ -49,7 +49,7 @@ def apiOverview(request):
         "Comment On Post": "/comment-comment/",
         "Uncomment On Post": "/comment-uncomment/",
         "Get Last User Comment": "/comment-last/<str:pk>/",
-        "Edit Profile": "/edit-bio"
+        "Edit Profile": "/edit-profile"
     }
 
     return Response(api_urls)  
@@ -259,4 +259,3 @@ def editProfile(request):
     serializer = siteUserSerializer(user, many=False)
     
     return Response(serializer.data)
-    
