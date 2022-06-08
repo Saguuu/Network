@@ -48,7 +48,8 @@ def apiOverview(request):
         "Unlike post": "/like-unlike/",
         "Comment On Post": "/comment-comment/",
         "Uncomment On Post": "/comment-uncomment/",
-        "Get Last User Comment": "/comment-last/<str:pk>/"
+        "Get Last User Comment": "/comment-last/<str:pk>/",
+        "Edit Profile": "/edit-bio"
     }
 
     return Response(api_urls)  
@@ -241,3 +242,21 @@ def commentGetLastComment(request, pk):
     serializer = CommentSerializer(last_comment, many=False)
 
     return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def editProfile(request):
+    
+    user = siteUser.objects.get(id=request.data["id"])
+    new_bio = request.data["bio"].strip()
+    new_image = request.data["image"].strip()
+
+    if (len(new_bio) < 255):
+        user.bio = new_bio
+        user.image = new_image
+        user.save()
+
+    serializer = siteUserSerializer(user, many=False)
+    
+    return Response(serializer.data)
+    
