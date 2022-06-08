@@ -81,8 +81,7 @@ export const AuthProvider = ({children}) => {
                 setUser((user) => ({
                     ...user,
                     id: jwt_decode(res.data.access).user_id,
-                    username: jwt_decode(res.data.access).username,
-                    image: jwt_decode(res.data.access).image,
+                    username: jwt_decode(res.data.access).username
                 }));
                 localStorage.setItem("authTokens", JSON.stringify(res.data))
             })
