@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import "./ProfileHeader.css";
 import AuthContext from '../context/AuthContext';
+import Modal from './Modal';
+import axios from "../axios";
 
-const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow }) => {
+const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow, setProfileUser }) => {
 
-    let {user} = useContext(AuthContext);
+    let {user, authTokens, fetchUserData} = useContext(AuthContext);
     let isFollowing = false;
     let isCurrentUser = false;
 
@@ -19,8 +21,49 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
         }
     }
 
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    let sendChanges = async (e) => {
+
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + String(authTokens.access)
+        }
+
+        await axios.post("/api/edit-profile/", {
+            "id": user.id,
+            "bio": e.target.parentNode.parentNode.childNodes[0].childNodes[1].value,
+            "image": e.target.parentNode.parentNode.childNodes[1].childNodes[1].value
+        }, {headers: headers})
+        .then(res => {
+            let fetchProfileUserData = async () => {
+                await axios.get(`/api/user-single/${userId}/`)
+                .then(res => {
+                    setProfileUser(res.data);
+                })
+                .catch(e => {
+                    console.log(e.response);
+                });
+            }
+            fetchProfileUserData();
+            fetchUserData();
+            setModalIsOpen(false);
+        })
+        .catch(e => {
+            console.log(e.response);
+        });
+    }
+
     return (
         <div className="profileheader">
+            <Modal 
+            open={ modalIsOpen } 
+            onClose={() => setModalIsOpen(false)}
+            bio={ bio }
+            image={ image }
+            sendChanges={ sendChanges }
+            >
+            </Modal>
             <div className="profileheader__top">
                 <div className="profileheader__topLeft">
                     <img className="profileheader__topLeftImage" src={ image } alt="" />
@@ -28,13 +71,13 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
                 </div>
                 <div className="profileheader__topRight">
                     {isCurrentUser ? (
-                        <button id={userId} className="profileheader__topRightButton">Edit Profile</button>
+                        <button id={userId} className="profileheader__topRightButton" onClick={() => setModalIsOpen(true)}>Edit Profile</button>
                     ) : null}
                     {!isCurrentUser && isFollowing ? (
                         <button id={userId} className="profileheader__topRightButtonUnfollow" onClick={handleFollow}>Unfollow</button>
                     ): null}
                     {!isCurrentUser && !isFollowing ? (
-                    <button id={userId} className="profileheader__topRightButton" onClick={handleFollow}>Follow</button>
+                        <button id={userId} className="profileheader__topRightButton" onClick={handleFollow}>Follow</button>
                     ): null}
                 </div>
             </div>

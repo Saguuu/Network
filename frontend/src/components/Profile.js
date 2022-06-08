@@ -20,7 +20,7 @@ const Profile = () => {
         followed: false
     });
     const { userId } = useParams();
-    let {user, authTokens, logoutUser, fetchUserData} = useContext(AuthContext);
+    let {user, authTokens, fetchUserData} = useContext(AuthContext);
     const location = useLocation();
     const data = location.state;
 
@@ -174,6 +174,7 @@ const Profile = () => {
                     followed={ profileUser.user_followed?.length }
                     handleFeed={ handleFeed }
                     handleFollow={ handleFollow }
+                    setProfileUser={ setProfileUser }
                     />
                     {currentFeed.posts ? (
                     <ProfileFeed 
