@@ -99,7 +99,7 @@ const Nav = () => {
             </div>
             </Link>
             ): null}
-            <Link to="/login" style={{ textDecoration: 'none' }}>
+            <Link to="/register" style={{ textDecoration: 'none' }}>
             {!user ? (
             <div className="nav__item">
                 <AppRegistrationIcon fontSize="large" className="nav__itemImage"> 

@@ -28,11 +28,12 @@ const Login = () => {
 
                 <p>By signing-in you agree to the Network Conditions of Use & Sale. Please
                         see our Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice.</p>
-
+                <Link to="/register">
                 <button type="submit" className="login__registerButton">Create account</button>
+                </Link>
             </div>
         </div>
-  )
+    );
 }
 
 export default Login
