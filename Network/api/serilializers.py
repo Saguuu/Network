@@ -7,11 +7,11 @@ class FollowSerializer(serializers.ModelSerializer):
     follower = serializers.CharField(source="follower.user.username")
     follower_image = serializers.CharField(source="follower.image")
     follower_bio = serializers.CharField(source="follower.bio")
-    follower_id = serializers.IntegerField(source="follower.user.id")
+    follower_id = serializers.IntegerField(source="follower.id")
     followee = serializers.CharField(source="followee.user.username")
     followee_image = serializers.CharField(source="followee.image")
     followee_bio = serializers.CharField(source="followee.bio")
-    followee_id = serializers.IntegerField(source="followee.user.id")
+    followee_id = serializers.IntegerField(source="followee.id")
 
     class Meta:
         model = Follow
@@ -33,7 +33,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     poster = serializers.CharField(source="poster.user.username")
-    poster_id = serializers.IntegerField(source="poster.user.id")
+    poster_id = serializers.IntegerField(source="poster.id")
     poster_image = serializers.CharField(source="poster.image")
     post_likes = LikeSerializer(many=True)
     post_comments = CommentSerializer(many=True)

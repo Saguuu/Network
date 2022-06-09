@@ -16,6 +16,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
+        token['id'] = user.site_user.id
         # ...
 
         return token
@@ -31,6 +32,7 @@ def apiOverview(request):
         "Token Refresh": "/token/refresh/",
         "Post": "/post-list/",
         "User": "/user-list/",
+        "Register User": "/user-register/",
         "Single User": "/user-single/",
         "User Likes": "/user-likes/<str:pk>",
         "Followed By": "/followed-list/<str:pk>/",
@@ -51,6 +53,25 @@ def apiOverview(request):
     }
 
     return Response(api_urls)  
+
+@api_view(["POST"])
+def userRegister(request):
+    
+    username = request.data["username"]
+    pass1 = request.data["password1"]
+    pass2 = request.data["password2"]
+
+    exists = User.objects.filter(username__icontains=username).exists()
+
+    if exists or (pass1 != pass2):
+        return Response("User with that name already exists or passwords do not match", status=202)
+    
+    new_user = User.objects.create_user(username=username, password=pass1)
+    new_site_user = siteUser(user=new_user)
+    new_site_user.save()
+    serializer = siteUserSerializer(new_site_user)
+
+    return Response(serializer.data)
 
 @api_view(["GET"])
 def userList(request):

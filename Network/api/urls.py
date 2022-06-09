@@ -11,6 +11,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("", views.apiOverview, name="api-overview"),
     path("user-list/", views.userList, name="user-list"),
+    path("user-register/", views.userRegister, name="user-register"),
     path("user-single/<str:pk>/", views.userSingle, name="user-single"),
     path("user-likes/<str:pk>/", views.userLikes, name="user-likes"),
     path("post-list/", views.postList, name="post-list"),
