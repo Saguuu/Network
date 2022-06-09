@@ -10,7 +10,7 @@ export default AuthContext;
 export const AuthProvider = ({children}) => {
 
     let authState = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
-    let id = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).user_id : null;
+    let id = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).id : null;
     let username = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).username : null;
     let image = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).image : null;
 
@@ -23,6 +23,43 @@ export const AuthProvider = ({children}) => {
     let [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
+
+    let registerUser = (e) => {
+
+        e.preventDefault();
+
+        const headers = {
+            "Content-Type": "application/json"
+        }
+
+        let create = async () => {
+            await axios.post("/api/user-register/", {
+                "username": e.target.parentNode.childNodes[1].value,
+                "password1": e.target.parentNode.childNodes[3].value,
+                "password2": e.target.parentNode.childNodes[5].value
+            }, {headers: headers})
+            .then(res => {
+                console.log(res);
+                if (res.status === 202) {
+                    e.target.parentNode.childNodes[1].style.border = "1px solid red";
+                    e.target.parentNode.childNodes[3].style.border = "1px solid red";
+                    e.target.parentNode.childNodes[5].style.border = "1px solid red";
+                    let p = e.target.parentNode.appendChild(document.createElement("p", ));
+                    p.innerHTML = "User with that name already exists or passwords do not match";
+                    p.style.color = "red";
+                    setTimeout(() => {
+                        p.remove();
+                    }, 5000);
+                } else {
+                    loginUser(e);
+                }
+            })
+            .catch(e => {
+                console.log(e.response);
+            })
+        }
+        create();
+    }
 
     let loginUser = (e) => {
 
@@ -40,7 +77,7 @@ export const AuthProvider = ({children}) => {
             .then(res => {
                 setAuthTokens(res.data);    
                 setUser({
-                    "id": jwt_decode(res.data.access).user_id,
+                    "id": jwt_decode(res.data.access).id,
                     "username": jwt_decode(res.data.access).username,
                     "image": jwt_decode(res.data.access).image,
                 });
@@ -80,7 +117,7 @@ export const AuthProvider = ({children}) => {
                 setAuthTokens(res.data);    
                 setUser((user) => ({
                     ...user,
-                    id: jwt_decode(res.data.access).user_id,
+                    id: jwt_decode(res.data.access).id,
                     username: jwt_decode(res.data.access).username
                 }));
                 localStorage.setItem("authTokens", JSON.stringify(res.data))
@@ -98,29 +135,32 @@ export const AuthProvider = ({children}) => {
     }
 
     let fetchUserData = async () => {
-        await axios.get(`/api/user-single/${user?.id}/`)
-        .then(res => {
-            setUser((user) => ({
-                ...user,
-                image: res.data.image,
-                bio: res.data.bio,
-                posts: res.data.user_posts,
-                follows: res.data.user_follows,
-                followed: res.data.user_followed,
-                likes: res.data.user_likes,
-                comments: res.data.user_comments
-            }));
-            setLoading(false);
-        })
-        .catch(e => {
-            console.log(e.response);
-            setLoading(false);
-        });
+
+        if (user) {
+            await axios.get(`/api/user-single/${user?.id}/`)
+            .then(res => {
+                setUser((user) => ({
+                    ...user,
+                    image: res.data.image,
+                    bio: res.data.bio,
+                    posts: res.data.user_posts,
+                    follows: res.data.user_follows,
+                    followed: res.data.user_followed,
+                    likes: res.data.user_likes,
+                    comments: res.data.user_comments
+                }));
+            })
+            .catch(e => {
+                console.log(e.response);
+            });
+        }
+        setLoading(false);
     }
 
     let contextData = {
         user:user,
         authTokens:authTokens,
+        registerUser:registerUser,
         loginUser:loginUser,
         logoutUser:logoutUser,
         setUser:setUser,
