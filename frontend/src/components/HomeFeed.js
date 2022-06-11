@@ -39,7 +39,9 @@ const HomeFeed = () => {
                 userId={ post.poster_id }
                 content={ post.content }
                 likes={ post.post_likes.length }
-                comments={ post.post_comments } 
+                comments={ post.post_comments }
+                posts={ posts }
+                setPosts={ setPosts } 
                 />  
             ))}
         </div>
