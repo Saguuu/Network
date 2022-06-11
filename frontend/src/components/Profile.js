@@ -11,6 +11,7 @@ import UserFeedFollowed from './UserFeedFollowed';
 
 const Profile = () => {
 
+    const [profileUserPosts, setProfileUserPosts] = useState([]);
     const [profileUser, setProfileUser] = useState([]);
     const [profileLikes, setProfileLikes] = useState([]);
     const [currentFeed, setCurrentFeed] = useState({
@@ -72,7 +73,6 @@ const Profile = () => {
                 "followee": e.target.id
             }, {headers: headers})
             .then(res => {
-                console.log(res);
                 let fetchProfileUserData = async () => {
                     await axios.get(`/api/user-single/${profileUser.id}/`)
                     .then(res => {
@@ -124,6 +124,7 @@ const Profile = () => {
     useEffect(() => {
 
         if (data?.fromPost) {
+            window.scrollTo(0, 0);
             setCurrentFeed((currentFeed) => ({
                 ...currentFeed,
                 posts: true
@@ -139,6 +140,7 @@ const Profile = () => {
             await axios.get(`/api/user-single/${userId}/`)
             .then(res => {
                 setProfileUser(res.data);
+                setProfileUserPosts(res.data.user_posts);
             })
             .catch(e => {
                 console.log(e.response);
@@ -178,12 +180,14 @@ const Profile = () => {
                     />
                     {currentFeed.posts ? (
                     <ProfileFeed 
-                    posts={ profileUser.user_posts?.map(post => (post)).reverse() }
+                    posts={ profileUserPosts.map(post => (post)).reverse() }
+                    setProfileUserPosts={ setProfileUserPosts }
                     />
                     ): null}
                     {currentFeed.likes ? (
                     <ProfileFeed 
                     posts={ profileLikes?.map(post => (post)) }
+                    setProfileLikes={ setProfileLikes }
                     />
                     ): null}
                     {currentFeed.following ? (
