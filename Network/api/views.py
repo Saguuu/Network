@@ -140,10 +140,18 @@ def postUpdate(request, pk):
     return Response(serializer.data)
 
 @api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
 def postDelete(request, pk):
     
-    post = Post.objects.get(id=pk)
-    post.delete()
+    if request.user.is_anonymous:
+        return Response("Rejected")
+    else:
+        post = Post.objects.get(id=pk)
+        if post:
+            if request.user.site_user.id == post.poster.id:
+                post.delete()
+            else:
+                return("Post does not exist")
 
     return Response("Post Deleted")
 
@@ -244,7 +252,7 @@ def commentComment(request):
     new_comment.save()
     return Response("Post liked")
 
-@api_view(["POST"])
+@api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def commentUncomment(request):
     
