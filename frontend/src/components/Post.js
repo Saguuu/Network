@@ -9,22 +9,15 @@ import CommentIcon from '@mui/icons-material/Comment';
 import AuthContext from '../context/AuthContext';
 import axios from "../axios";
 
-const Post = ({ id, userId, poster, image, content, likes, date, comments }) => {
+const Post = ({ id, userId, poster, image, content, likes, date, comments, posts, setPosts, setProfileLikes, setProfileUserPosts }) => {
 
-    let {user, authTokens, fetchUserData} = useContext(AuthContext);
-    let isLiked = false;
-    let [showComments, setShowComments] = useState(false);
-    let [showCommentsClicked, setShowCommentsClicked] = useState(false);
-    let [postComments, setPostComments] = useState([]);
-
-    // Check if there is a logged in user and if the post has been liked by them
-    if (user) {
-        for (let i = 0; i < user.likes.length; i++) {
-            if (user.likes[i]["post"] === id) {
-                isLiked = true;
-            }
-        }
-    }
+    const {user, authTokens, fetchUserData} = useContext(AuthContext);
+    const [isLiked, setIsLiked] = useState(false);
+    const [showComments, setShowComments] = useState(false);
+    const [showCommentsClicked, setShowCommentsClicked] = useState(false);
+    const [postComments, setPostComments] = useState([]);
+    const [isCurrentUser, setIsCurrentUser] = useState(false);
+    const [postLikes, setPostLikes] = useState(likes);
 
     // Grab input date and convert to nicer format depending on time since the post was created
     let newDate;
@@ -64,6 +57,8 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments }) => 
         }, {headers: headers})
         .then(res => {
             fetchUserData();
+            setIsLiked(true);
+            setPostLikes(likes + 1);
         })
         .catch(e => {
             console.log(e.response);
@@ -83,6 +78,8 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments }) => 
         }, {headers: headers})
         .then(res => {
             fetchUserData();
+            setIsLiked(false);
+            setPostLikes(likes - 1);
         })
         .catch(e => {
             console.log(e.response);
@@ -100,7 +97,53 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments }) => 
         }
     }
 
+    let handleDelete = async (e) => {
+
+        if (isCurrentUser) {
+
+            const isPost = (post) => post.id === id;
+            const index = posts.findIndex(isPost);
+            posts.splice(index, 1);
+
+            await axios.delete(`/api/post-delete/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + String(authTokens.access)
+                    }
+            })
+            .then(res => {
+                console.log(res);
+                if (setPosts) {
+                    setPosts([...posts]);
+                } else if (setProfileLikes) {
+                    setProfileLikes([...posts]);
+                } else {
+                    setProfileUserPosts([...posts]);
+                }
+            })
+            .catch(e => {
+                console.log(e.response);
+            })
+        } else {
+            return
+        }
+    }
+
     useEffect(() => {
+
+        // Check if there is a logged in user and if the post has been liked by them, and whether the post is made by currently logged in user
+        if (user) {
+            for (let i = 0; i < user.likes.length; i++) {
+                if (user.likes[i]["post"] === id) {
+                    setIsLiked(true);
+                }
+            }
+
+            if (user.id === userId) {
+                setIsCurrentUser(true);
+            }
+
+        }
 
         setPostComments(comments);  
 
@@ -123,26 +166,35 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments }) => 
                 <p>{ content }</p>
             </div>
             <div className="post__toolbar">
-                <div className="post__toolbarLikes">
-                    {!isLiked ? (
-                        <FavoriteBorderOutlinedIcon id={ id } className="post__toolbarLikesHeart" fontSize="small" onClick={ like }>
-                        </FavoriteBorderOutlinedIcon>
-                    ) : (
-                        <FavoriteOutlinedIcon id={ id } className="post__toolbarLikesHeartLiked" fontSize="small" onClick={ unLike }>
-                        </FavoriteOutlinedIcon>
-                    )}
-                    <p>{ likes }</p>
+                <div className="post__toolbarLeft">
+                    <div className="post__toolbarLikes">
+                        {!isLiked ? (
+                            <FavoriteBorderOutlinedIcon id={ id } className="post__toolbarLikesHeart" fontSize="small" onClick={ like }>
+                            </FavoriteBorderOutlinedIcon>
+                        ) : (
+                            <FavoriteOutlinedIcon id={ id } className="post__toolbarLikesHeartLiked" fontSize="small" onClick={ unLike }>
+                            </FavoriteOutlinedIcon>
+                        )}
+                        <p>{ postLikes }</p>
+                    </div>
+                    <div className="post__toolbarComments">
+                        {!showCommentsClicked ? (
+                            <CommentIcon className="post__toolbarCommentsIcon" fontSize="small" onClick={ toggleComments }>
+                            </CommentIcon>
+                        ) : (
+                            <CommentIcon className="post__toolbarCommentsIconClicked" fontSize="small" onClick={ toggleComments }>
+                            </CommentIcon>
+                        )}
+                        <p>{ comments.length }</p>
+                    </div>
                 </div>
-                <div className="post__toolbarComments">
-                    {!showCommentsClicked ? (
-                        <CommentIcon className="post__toolbarCommentsIcon" fontSize="small" onClick={ toggleComments }>
-                        </CommentIcon>
-                    ) : (
-                        <CommentIcon className="post__toolbarCommentsIconClicked" fontSize="small" onClick={ toggleComments }>
-                        </CommentIcon>
-                    )}
-                    <p>{ comments.length }</p>
+                {isCurrentUser ? (
+                <div className="post__toolbarRight">
+                    <div className="post__toolbarClose" onClick={handleDelete}>
+                        &#10006;
+                    </div>
                 </div>
+                ): null}
             </div>
             {showComments ? ( 
             <div className="post__comments">

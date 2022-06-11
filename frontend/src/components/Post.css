@@ -47,6 +47,12 @@
 
 .post__toolbar {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post__toolbarLeft {
+    display: flex;
 }
 
 .post__toolbarLikes {
@@ -95,4 +101,13 @@
     padding: 1vw;
     border-left: solid 1px rgba(255,255,255,.25);
     margin-left: 4vw;
+}
+.post__toolbarRight {
+    display: flex;
+    margin-right: 1vw;
+}
+
+.post__toolbarClose:hover {
+    cursor: pointer;
+    opacity: .3;
 }
