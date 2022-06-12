@@ -58,7 +58,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
         .then(res => {
             fetchUserData();
             setIsLiked(true);
-            setPostLikes(likes + 1);
+            setPostLikes(postLikes + 1);
         })
         .catch(e => {
             console.log(e.response);
@@ -79,12 +79,11 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
         .then(res => {
             fetchUserData();
             setIsLiked(false);
-            setPostLikes(likes - 1);
+            setPostLikes(postLikes - 1);
         })
         .catch(e => {
             console.log(e.response);
         });
-
     }
 
     let toggleComments = (e) => {
