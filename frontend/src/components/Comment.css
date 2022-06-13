@@ -16,6 +16,7 @@
 
 .comment__topRight {
     display: flex;
+    align-items: center;
 }
 
 .comment__topRight > p {
@@ -40,4 +41,13 @@
     margin-bottom: 1vw;
     word-wrap: break-word;
     font-size: 1vw;
+}
+
+.comment__topRightClose {
+    font-size: 1vw;
+}
+
+.comment__topRightClose:Hover {
+    cursor: pointer;
+    opacity: .3;
 }

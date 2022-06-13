@@ -146,7 +146,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
 
         setPostComments(comments);  
 
-    }, [setPostComments]);
+    }, [comments]);
 
     return (
         <div className="post">
@@ -184,7 +184,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                             <CommentIcon className="post__toolbarCommentsIconClicked" fontSize="small" onClick={ toggleComments }>
                             </CommentIcon>
                         )}
-                        <p>{ comments.length }</p>
+                        <p>{ postComments.length }</p>
                     </div>
                 </div>
                 {isCurrentUser ? (
@@ -213,6 +213,8 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                     content={ comment.content }
                     date={ comment.date }
                     calcDate={ calcDate }
+                    postComments= { postComments }
+                    setPostComments={ setPostComments }
                     />
                 )).reverse()}                        
             </div>
