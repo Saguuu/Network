@@ -111,7 +111,7 @@ export const AuthProvider = ({children}) => {
 
         if (authTokens) {
             await axios.post("/api/token/refresh/", {
-                "refresh": authTokens?.refresh
+                "refresh": JSON.parse(localStorage.getItem("authTokens"))?.refresh
             }, {headers: headers})
             .then(res => {
                 setAuthTokens(res.data);    
