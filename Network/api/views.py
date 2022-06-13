@@ -47,7 +47,7 @@ def apiOverview(request):
         "Like post": "/like-like/",
         "Unlike post": "/like-unlike/",
         "Comment On Post": "/comment-comment/",
-        "Uncomment On Post": "/comment-uncomment/",
+        "Uncomment On Post": "/comment-uncomment/<str:pk>/",
         "Get Last User Comment": "/comment-last/<str:pk>/",
         "Edit Profile": "/edit-profile"
     }
@@ -254,12 +254,19 @@ def commentComment(request):
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
-def commentUncomment(request):
+def commentUncomment(request, pk):
     
-    un_comment = Comment.objects.get(id=request.data["id"])
-    un_comment.delete()
+    if request.user.is_anonymous:
+        return Response("Rejected")
+    else:
+        comment = Comment.objects.get(id=pk)
+        if comment:
+            if request.user.site_user.id == comment.poster.id:
+                comment.delete()
+        else:
+            return Response("Comment does not exist")
 
-    return Response("Post unliked")
+    return Response("Comment Deleted")
 
 @api_view(["GET"])
 def commentGetLastComment(request, pk):

@@ -27,7 +27,7 @@ urlpatterns = [
     path("like-like/", views.likeLike, name="like-like"),
     path("like-unlike/", views.likeUnlike, name="like-unlike"),
     path("comment-comment/", views.commentComment, name="comment-comment"),
-    path("comment-uncomment/", views.commentUncomment, name="comment-uncomment"),
+    path("comment-uncomment/<str:pk>/", views.commentUncomment, name="comment-uncomment"),
     path("comment-last/<str:pk>/", views.commentGetLastComment, name="comment-last"),
     path("edit-profile/", views.editProfile, name="edit-profile"),
 ]
