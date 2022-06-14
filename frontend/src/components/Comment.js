@@ -4,12 +4,13 @@ import "./Comment.css";
 import AuthContext from '../context/AuthContext';
 import axios from "../axios";
 
-const Comment = ({ id, commenterId, commenter, commenterImage, content, date, calcDate, postComments, setPostComments }) => {
+const Comment = ({ id, commenterId, commenter, commenterImage, content, date, calcDate, postComments, setPostComments, Edit }) => {
 
     const {user, authTokens, fetchUserData} = useContext(AuthContext);
-    const [postContent, setContent] = useState(content);
+    const [postContent, setPostContent] = useState(content);
+    const [editIsOpen, setEditIsOpen] = useState(false);
     const [isCurrentUser, setIsCurrentUser] = useState(() => 
-        user.id === commenterId
+        user?.id === commenterId
     );
     const newDate = calcDate(date);
 
@@ -43,6 +44,16 @@ const Comment = ({ id, commenterId, commenter, commenterImage, content, date, ca
 
     return (
         <div className="comment">
+            <Edit 
+            id={ id }
+            from={ "Comment" }
+            initialContent={ postContent }
+            setPostContent={ setPostContent }
+            editIsOpen={ editIsOpen }
+            setEditIsOpen={ setEditIsOpen }
+            postComments={ postComments }
+            setPostComments={ setPostComments }
+            />
             <div className="comment__top">
                 <Link to={`/user/${commenterId}`} state={{fromPost: true}} style={{ textDecoration: 'none' }}>
                 <div className="comment__topLeft">
@@ -53,9 +64,16 @@ const Comment = ({ id, commenterId, commenter, commenterImage, content, date, ca
                 <div className="comment__topRight">
                     <p>{ newDate }</p>
                     {isCurrentUser ? (
-                        <div className="comment__topRightClose" onClick={ deleteComment }>
+                        <>
+                        <div className="comment__topRightClose" title="Delete Comment" onClick={ deleteComment }>
                             &#10006;
                         </div>
+                        <div className="comment__topRightMenu" title="Edit Comment" onClick={ () => setEditIsOpen(true) }>
+                            <div className="comment__topRightMenuCircle"></div>
+                            <div className="comment__topRightMenuCircle"></div>
+                            <div className="comment__topRightMenuCircle"></div>
+                        </div>
+                        </>
                     ): null}
                 </div>
             </div>

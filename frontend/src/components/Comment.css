@@ -51,3 +51,24 @@
     cursor: pointer;
     opacity: .3;
 }
+
+.comment__topRightMenu {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 5px;
+    gap: 1px;
+}
+
+.comment__topRightMenuCircle {
+    height: 5px;
+    width: 5px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.comment__topRightMenu:hover {
+    cursor: pointer;
+    opacity: .3;
+}

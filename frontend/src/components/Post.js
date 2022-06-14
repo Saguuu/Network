@@ -16,8 +16,10 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
     const [showComments, setShowComments] = useState(false);
     const [showCommentsClicked, setShowCommentsClicked] = useState(false);
     const [postComments, setPostComments] = useState([]);
+    const [postContent, setPostContent] = useState(content);
     const [isCurrentUser, setIsCurrentUser] = useState(false);
     const [postLikes, setPostLikes] = useState(likes);
+    const [editIsOpen, setEditIsOpen] = useState(false);
 
     // Grab input date and convert to nicer format depending on time since the post was created
     let newDate;
@@ -104,7 +106,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
             const index = posts.findIndex(isPost);
             posts.splice(index, 1);
 
-            await axios.delete(`/api/post-delete/${id}`, {
+            await axios.delete(`/api/post-delete/${id}/`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": "Bearer " + String(authTokens.access)
@@ -126,6 +128,72 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
         } else {
             return
         }
+    }
+
+    const Edit = ({ id, from, initialContent, setPostContent, editIsOpen, setEditIsOpen, postComments, setPostComments }) => {
+        
+        if (!editIsOpen) {
+            return null;
+        }
+
+        const handleEdit = async (e) => {
+
+            const newContent = e.target.parentNode.parentNode.childNodes[0].childNodes[1].value;
+            setPostContent(newContent);
+            setEditIsOpen(false);
+
+            const headers = {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + String(authTokens.access)
+            }
+
+            if (from === "Post") {
+        
+                await axios.post(`/api/post-update/${id}/`, {
+                    "id": user.id,
+                    "content": newContent,
+                }, {headers: headers})
+                .then(res => {
+                    console.log(res);
+                    fetchUserData();
+                })
+                .catch(e => {
+                    console.log(e.response);
+                });
+            } else {
+
+                await axios.post(`/api/comment-update/${id}/`, {
+                    "id": user.id,
+                    "content": newContent,
+                }, {headers: headers})
+                .then(res => {
+                    console.log(res);
+                    const isComment = (comment) => comment.id === id;
+                    const index = postComments.findIndex(isComment);
+                    postComments[index].content = newContent;
+                    setPostComments([...postComments]);
+                })
+                .catch(e => {
+                    console.log(e.response);
+                });
+            }  
+        }
+
+        return (
+            <>
+        <div className="overlay"></div>
+        <div className="edit">
+            <div className="edit__content">
+                <h3>Edit { from }:</h3>
+                <textarea defaultValue={ initialContent }></textarea>
+            </div>
+            <div className="edit__bottom">
+                <button className="edit__buttonClose" onClick={ () => setEditIsOpen(false) }>Close</button>
+                <button className="edit__buttonSave" onClick={ handleEdit }>Save</button>
+            </div>
+        </div>
+        </>
+        );
     }
 
     useEffect(() => {
@@ -150,6 +218,14 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
 
     return (
         <div className="post">
+            <Edit 
+            id={ id }
+            from={ "Post" }
+            initialContent={ postContent }
+            setPostContent={ setPostContent }
+            editIsOpen={ editIsOpen }
+            setEditIsOpen={ setEditIsOpen }
+            />
             <div className="post__header">
                 <Link to={`/user/${userId}`} state={{fromPost: true}} style={{ textDecoration: 'none' }}>
                 <div className="post__headerLeft">
@@ -159,10 +235,17 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                 </Link>
                 <div className="post__headerRight">
                     <p>{ newDate }</p>
+                    {isCurrentUser ? (
+                    <div className="post__headerRightMenu" title="Edit Post" onClick={ () => setEditIsOpen(true) }>
+                        <div className="post__headerRightMenuCircle"></div>
+                        <div className="post__headerRightMenuCircle"></div>
+                        <div className="post__headerRightMenuCircle"></div>
+                    </div>
+                    ): null}
                 </div>
             </div>
             <div className="post__content">
-                <p>{ content }</p>
+                <p>{ postContent }</p>
             </div>
             <div className="post__toolbar">
                 <div className="post__toolbarLeft">
@@ -189,7 +272,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                 </div>
                 {isCurrentUser ? (
                 <div className="post__toolbarRight">
-                    <div className="post__toolbarClose" onClick={handleDelete}>
+                    <div className="post__toolbarClose" onClick={ handleDelete } title="Delete Post">
                         &#10006;
                     </div>
                 </div>
@@ -215,6 +298,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                     calcDate={ calcDate }
                     postComments= { postComments }
                     setPostComments={ setPostComments }
+                    Edit={ Edit }
                     />
                 )).reverse()}                        
             </div>
