@@ -14,7 +14,7 @@ class siteUser(models.Model):
 class Post(models.Model):
     poster = models.ForeignKey(siteUser, on_delete=models.CASCADE, related_name="user_posts")
     content = models.CharField(max_length=100, default="")
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.poster.user.username}'s post {self.id}"
@@ -39,7 +39,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_comments")
     poster = models.ForeignKey(siteUser, on_delete=models.CASCADE, related_name="user_comments")
     content = models.CharField(max_length=100, default="")
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.poster} commented on {self.post}"

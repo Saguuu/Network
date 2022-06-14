@@ -129,15 +129,21 @@ def postCreate(request):
     return Response("Post sent!")
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def postUpdate(request, pk):
     
-    post = Post.objects.get(id=pk)
-    serializer = PostSerializer(instance=post, data=request.data)
+    if request.user.is_anonymous:
+        return Response("Rejected")
+    else:
+        post = Post.objects.get(id=pk)
+        if post:
+            if request.user.site_user.id == post.poster.id:
+                post.content = request.data["content"].strip()
+                post.save()
+        else:
+            return("Post does not exist")
 
-    if serializer.is_valid():
-        serializer.save()
-
-    return Response(serializer.data)
+    return Response("Post Updated")
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
@@ -150,8 +156,8 @@ def postDelete(request, pk):
         if post:
             if request.user.site_user.id == post.poster.id:
                 post.delete()
-            else:
-                return("Post does not exist")
+        else:
+            return("Post does not exist")
 
     return Response("Post Deleted")
 
@@ -267,6 +273,23 @@ def commentUncomment(request, pk):
             return Response("Comment does not exist")
 
     return Response("Comment Deleted")
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def commentUpdate(request, pk):
+    
+    if request.user.is_anonymous:
+        return Response("Rejected")
+    else:
+        comment = Comment.objects.get(id=pk)
+        if comment:
+            if request.user.site_user.id == comment.poster.id:
+                comment.content = request.data["content"].strip()
+                comment.save()
+        else:
+            return Response("Comment does not exist")
+
+    return Response("Comment Updated")
 
 @api_view(["GET"])
 def commentGetLastComment(request, pk):
