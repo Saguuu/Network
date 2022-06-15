@@ -14,20 +14,21 @@
 }
 
 .createpost__image {
-    width: 5vw;
-    height: 5vw;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 360px;
 }
 
 .createpost__message {
-    border: 3px solid #cccccc;
 	padding: 5px;
+    color: white;
 	font-family: Tahoma, sans-serif;
 	background-position: bottom right;
 	background-repeat: no-repeat;
-    width: 15vw;
-    height: 5vw;
+    background-color: rgb(37, 37, 37);
+    width: 250px;
+    height: 100px;
     resize: none;
 }
 
@@ -42,13 +43,37 @@
     border-radius: 360px;
     border: 1px solid;
     color: #111;
-    width: 3vw;
-    height: 2vw;
-    font-size: 1vw;
-    padding: 0px;
+    width: 70px;
+    height: 40px;
+    font-size: 15px;
 }
 
 .createpost__button:hover {
     background-color: white;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 1200px) {
+    .createpost__image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .createpost__message {
+        padding: 5px;
+        color: white;
+        font-family: Tahoma, sans-serif;
+        background-position: bottom right;
+        background-repeat: no-repeat;
+        background-color: rgb(37, 37, 37);
+        width: 150px;
+        height: 50px;
+        resize: none;
+    }
+
+    .createpost__button {
+        width: 35px;
+        height: 20px;
+        font-size: 10px;
+    }
 }

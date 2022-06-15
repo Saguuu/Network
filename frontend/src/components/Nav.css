@@ -3,7 +3,7 @@
     justify-content: space-between;
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: 100%;
     z-index: 100;
 }
 
@@ -11,8 +11,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-left: -8vw;
-    margin-right: 8vw;
+    margin-left: -300px;
+    margin-right: 80px;
 }
 
 .nav__item {
@@ -22,6 +22,9 @@
     gap: 15px;
 }
 
+.nav__item:hover {
+    cursor: pointer;
+}
 .nav__item:hover > .nav__itemImage {
     color:  grey;
 }
@@ -40,4 +43,14 @@
 .nav__itemText {
     font-size: 20px;
     color: white;
+}
+
+@media only screen and (max-width: 1200px) {
+    .nav__itemText {
+        display: none;
+    }
+
+    .nav__container {
+        margin-left: 0;
+    }
 }

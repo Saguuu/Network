@@ -16,13 +16,13 @@
 .profileheader__topLeft {
     display: flex;
     align-items: center;
-    gap: 1vw;
+    gap: 10px;
 }
 
 .profileheader__topLeftImage {
-    padding: .5vw;
-    height: 10vw;
-    width: 10vw;
+    padding: 5px;
+    height: 150px;
+    width: 150px;
     object-fit: cover;
     border-radius: 360px;
 }
@@ -37,11 +37,11 @@
     border-radius: 360px;
     border: 1px solid;
     color: #111;
-    width: 6vw;
-    height: 3vw;
-    font-size: 1vw;
-    margin-top: 1vw;
-    margin-right: 1vw;
+    width: 100px;
+    height: 50px;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 .profileheader__topRightButton:hover {
@@ -55,11 +55,11 @@
     border-radius: 360px;
     border: 1px solid;
     color: white;
-    width: 6vw;
-    height: 3vw;
-    font-size: 1vw;
-    margin-top: 1vw;
-    margin-right: 1vw;
+    width: 100px;
+    height: 50px;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 .profileheader__topRightButtonUnfollow:hover {
@@ -78,6 +78,7 @@
     margin-left: 5px;
     margin-top: 25px;
     gap: 10px;
+    font-size: 15px;
 }
 
 .profileheader__bottomOne:hover {
@@ -113,4 +114,38 @@
 .profileheader__toolbarItem:hover {
     box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.1);
     cursor: pointer;
+}
+
+@media only screen and (max-width: 1200px) {
+    .profileheader__topLeftImage {
+        padding: 10px;
+        height: 50px;
+        width: 50px;
+    }
+
+    .profileheader__topRightButton {
+        width: 50px;
+        height: 25px;
+        font-size: 10px;
+        margin-top: 5px;
+        margin-right: 5px;
+    }
+    
+    .profileheader__topRightButton:hover {
+        background-color: rgb(53, 97, 146);
+        cursor: pointer;
+    }
+    
+    .profileheader__topRightButtonUnfollow {
+        width: 50px;
+        height: 25px;
+        font-size: 10px;
+        margin-top: 5px;
+        margin-right: 5px;
+    }
+
+    .profileheader__toolbarItem {
+        padding: 5px;
+        margin-top: 5px;
+    }
 }

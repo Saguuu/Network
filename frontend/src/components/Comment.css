@@ -11,7 +11,7 @@
 .comment__topLeft {
     display: flex;
     align-items: center;
-    gap: .5vw;
+    gap: 5px;
 }
 
 .comment__topRight {
@@ -20,31 +20,31 @@
 }
 
 .comment__topRight > p {
-    font-size: 1vw;
-    padding: .5vw;
+    font-size: 13px;
+    padding: 5px;
 }
 
 .comment__topLeftImage {
-    height: 2vw;
-    width: 2vw;
+    height: 25px;
+    width: 25px;
     border-radius: 360px;
     object-fit: cover;
 }
 
 .comment__topLeftName {
     color: white;
-    font-size: 1vw;
+    font-size: 13px;
 }
 
 .comment__middle {
-    margin-top: 1vw;
-    margin-bottom: 1vw;
+    margin-top: 10px;
+    margin-bottom: 10px;
     word-wrap: break-word;
-    font-size: 1vw;
+    font-size: 12px;
 }
 
 .comment__topRightClose {
-    font-size: 1vw;
+    font-size: 12px;
 }
 
 .comment__topRightClose:Hover {

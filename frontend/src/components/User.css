@@ -16,13 +16,13 @@
 
 .user__topLeftName {
     color: white;
-    font-size: 1.5vw;
+    font-size: 18px;
 }
 
 .user__topLeftImage {
-    padding: .5vw;
-    height: 3vw;
-    width: 3vw;
+    padding: 5px;
+    height: 35px;
+    width: 35px;
     border-radius: 360px;
     object-fit: cover;
 }
@@ -33,11 +33,11 @@
     border-radius: 360px;
     border: 1px solid;
     color: #111;
-    width: 4vw;
-    height: 2vw;
-    font-size: 1vw;
-    margin-top: 1vw;
-    margin-right: 1vw;
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 .user__topRightButtonFollow:hover {
@@ -51,11 +51,11 @@
     border-radius: 360px;
     border: 1px solid;
     color: white;
-    width: 4vw;
-    height: 2vw;
-    font-size: .8vw;
-    margin-top: 1vw;
-    margin-right: 1vw;
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 .user__topRightButtonUnfollow:hover {

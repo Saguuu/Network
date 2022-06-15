@@ -9,7 +9,6 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    gap: 50px;
 }
 
 .post__headerLeft {
@@ -19,30 +18,30 @@
 
 .post__headerRight {
     display: flex;
-    margin-bottom: 2vw;
+    margin-bottom: 25px;
 }
 
 .post__headerRight > p {
-    font-size: 1vw;
-    padding: .5vw;
+    font-size: 15px;
+    padding: 5px;
 }
 
 .post__headerLeftImage {
-    padding: .5vw;
-    height: 3vw;
-    width: 3vw;
+    padding: 5px;
+    height: 40px;
+    width: 40px;
     border-radius: 360px;
     object-fit: cover;
 }
 
 .post__headerLeftName {
     color: white;
-    font-size: 1.5vw;
+    font-size: 20px;
 }
 
 .post__content {
-    padding: .5vw;
-    font-size: 1.5vw;
+    padding: 5px;
+    font-size: 15px;
     word-wrap: break-word;
 }
 
@@ -58,7 +57,7 @@
 
 .post__toolbarLikes {
     display: flex;
-    padding: .5vw;
+    padding: 5px;
     gap: 3px;
 }
 
@@ -78,7 +77,7 @@
 
 .post__toolbarComments {
     display: flex;
-    padding: .5vw;
+    padding: 5px;
     gap: 3px;
 }
 
@@ -99,13 +98,13 @@
 .post__comments {
     display: flex;
     flex-direction: column;
-    padding: 1vw;
+    padding: 5px;
     border-left: solid 1px rgba(255,255,255,.25);
-    margin-left: 4vw;
+    margin-left: 50px;
 }
 .post__toolbarRight {
     display: flex;
-    margin-right: .5vw;
+    margin-right: 5px;
 }
 
 .post__toolbarClose:hover {
@@ -223,4 +222,10 @@
 .edit__buttonSave:hover {
     cursor: pointer;
     background-color: grey;
+}
+
+@media only screen and (max-width: 1200px) {
+    .followfeed {
+        width: 250px;
+    }
 }
