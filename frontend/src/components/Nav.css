@@ -11,8 +11,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-left: -300px;
-    margin-right: 80px;
+    margin-left: 0;
+    margin-right: 40px;
 }
 
 .nav__item {

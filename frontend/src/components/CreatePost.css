@@ -53,7 +53,7 @@
     cursor: pointer;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 700px) {
     .createpost__image {
         width: 50px;
         height: 50px;
