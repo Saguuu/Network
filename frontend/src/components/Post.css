@@ -142,12 +142,12 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: black;
-    padding: 1vw;
+    padding: 15px;
     z-index: 1000;
     border-radius: 20px;
     border: solid 1px white;
-    height: 40vw;
-    width: 35vw;
+    height: 500px;
+    width: 500px;
 }
 
 .overlay {
@@ -164,7 +164,7 @@
 .edit__content {
     display: flex;
     flex-direction: column;
-    gap: 1vw;
+    gap: 10px;
 }
 
 .edit__content > textarea {
@@ -176,24 +176,12 @@
     overflow: auto;
     color: white;
     width: 100%;
-    height: 25vw;
-}
-
-.edit__image > textarea {
-    background-color: rgb(34, 33, 33);
-    border: none;
-    outline: none;
-    resize: none;
-    word-wrap: break-word;
-    overflow: auto;
-    color: white;
-    width: 100%;
-    height: 5vw;
+    height: 350px;
 }
 
 .edit__buttonClose {
-    width: 5vw;
-    height: 2vw;
+    width: 80px;
+    height: 30px;
     border-radius: 10px;
 }
 
@@ -202,20 +190,14 @@
     background-color: grey;
 }
 
-.edit__image {
-    display: flex;
-    flex-direction: column;
-    gap: 1vw;
-}
-
 .edit__bottom {
     display: flex;
     justify-content: space-between;
 }
 
 .edit__buttonSave {
-    width: 5vw;
-    height: 2vw;
+    width: 80px;
+    height: 30px;
     border-radius: 10px;
 }
 
@@ -225,7 +207,8 @@
 }
 
 @media only screen and (max-width: 1200px) {
-    .followfeed {
-        width: 250px;
+    .edit {
+        height: 500px;
+        width: 300px;
     }
 }

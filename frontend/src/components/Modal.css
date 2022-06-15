@@ -7,12 +7,12 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: black;
-    padding: 1vw;
+    padding: 15px;
     z-index: 1000;
     border-radius: 20px;
     border: solid 1px white;
-    height: 40vw;
-    width: 35vw;
+    height: 600px;
+    width: 500px;
 }
 
 .overlay {
@@ -29,7 +29,7 @@
 .modal__bio {
     display: flex;
     flex-direction: column;
-    gap: 1vw;
+    gap: 10px;
 }
 
 .modal__bio > textarea {
@@ -41,7 +41,7 @@
     overflow: auto;
     color: white;
     width: 100%;
-    height: 25vw;
+    height: 350px;
 }
 
 .modal__image > textarea {
@@ -53,12 +53,12 @@
     overflow: auto;
     color: white;
     width: 100%;
-    height: 5vw;
+    height: 100px;
 }
 
 .modal__buttonClose {
-    width: 5vw;
-    height: 2vw;
+    width: 80px;
+    height: 30px;
     border-radius: 10px;
 }
 
@@ -70,7 +70,7 @@
 .modal__image {
     display: flex;
     flex-direction: column;
-    gap: 1vw;
+    gap: 10px;
 }
 
 .modal__bottom {
@@ -79,12 +79,19 @@
 }
 
 .modal__buttonSave {
-    width: 5vw;
-    height: 2vw;
+    width: 80px;
+    height: 30px;
     border-radius: 10px;
 }
 
 .modal__buttonSave:hover {
     cursor: pointer;
     background-color: grey;
+}
+
+@media only screen and (max-width: 1200px) {
+    .modal {
+        height: 600px;
+        width: 300px;
+    }
 }
