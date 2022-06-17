@@ -106,7 +106,7 @@ def userLikes(request, pk):
 @api_view(["GET"])
 def userPosts(request, pk):
 
-    posts = Post.objects.all().filter(poster=pk).order_by("-id")
+    posts = Post.objects.all().filter(poster=pk)
     serializer = PostSerializer(posts, many=True)
 
     return Response(serializer.data)
