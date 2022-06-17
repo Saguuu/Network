@@ -24,7 +24,7 @@ const User = ({ id, image, username, bio, handleFollow }) => {
     return (
         <div className="user">
             <div className="user__top">
-                <Link to={`/user/${id}`} state={{fromPost: true}} style={{ textDecoration: 'none' }}>
+                <Link to={`/user/${id}`} style={{ textDecoration: 'none' }}>
                 <div className="user__topLeft">
                     <img className="user__topLeftImage" src={image} alt="" />
                     <p className="user__topLeftName">{username}</p>

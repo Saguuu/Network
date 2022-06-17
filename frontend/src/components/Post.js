@@ -214,7 +214,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
 
         setPostComments(comments);  
 
-    }, [comments]);
+    }, [id, user, userId, comments]);
 
     return (
         <div className="post">
@@ -227,7 +227,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
             setEditIsOpen={ setEditIsOpen }
             />
             <div className="post__header">
-                <Link to={`/user/${userId}`} state={{fromPost: true}} style={{ textDecoration: 'none' }}>
+                <Link to={`/user/${userId}`} style={{ textDecoration: 'none' }}>
                 <div className="post__headerLeft">
                     <img className="post__headerLeftImage" src={ image } alt="userImg" />
                     <h3 className="post__headerLeftName">{ poster }</h3>
