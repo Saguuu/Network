@@ -34,7 +34,8 @@ def apiOverview(request):
         "User": "/user-list/",
         "Register User": "/user-register/",
         "Single User": "/user-single/",
-        "User Likes": "/user-likes/<str:pk>",
+        "User Likes": "/user-likes/<str:pk>/",
+        "User posts": "/user-posts/<str:pk>/",
         "Followed By": "/followed-list/<str:pk>/",
         "Following": "/following-list/<str:pk>/",
         "Posts By Following": "/post-following/<str:pk>/",
@@ -49,7 +50,7 @@ def apiOverview(request):
         "Comment On Post": "/comment-comment/",
         "Uncomment On Post": "/comment-uncomment/<str:pk>/",
         "Get Last User Comment": "/comment-last/<str:pk>/",
-        "Edit Profile": "/edit-profile"
+        "Edit Profile": "/edit-profile/"
     }
 
     return Response(api_urls)  
@@ -99,6 +100,14 @@ def userLikes(request, pk):
         response.append(Post.objects.get(id=i.post.id))
 
     serializer = PostSerializer(response, many=True)
+
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def userPosts(request, pk):
+
+    posts = Post.objects.all().filter(poster=pk).order_by("-id")
+    serializer = PostSerializer(posts, many=True)
 
     return Response(serializer.data)
 
