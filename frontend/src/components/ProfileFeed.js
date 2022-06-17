@@ -1,10 +1,16 @@
 import React from 'react';
 import "./ProfileFeed.css";
 import Post from './Post';
+import { CircularProgress } from '@mui/material';
 
-const ProfileFeed = ({ posts, setProfileLikes, setProfileUserPosts }) => {
+const ProfileFeed = ({ posts, setProfileLikes, setProfileUserPosts, feedLoading }) => {
     return (
         <div className="profilefeed">
+            {feedLoading ? (
+            <div className="progress">
+                <CircularProgress />
+            </div>
+            ): null}
             {posts?.map((post) => (
                 <Post 
                 image={ post.poster_image }

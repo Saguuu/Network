@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import "./Profile.css";
 import Nav from './Nav';
 import axios from "../axios";
@@ -14,6 +14,10 @@ const Profile = () => {
     const [profileUserPosts, setProfileUserPosts] = useState([]);
     const [profileUser, setProfileUser] = useState([]);
     const [profileLikes, setProfileLikes] = useState([]);
+    const [profileFollowed, setProfileFollowed] = useState([]);
+    const [profileFollowing, setProfileFollowing] = useState([]);
+    const [feedLoading, setFeedLoading] = useState(true);
+    const [headerLoading, setHeaderLoading] = useState(true);
     const [currentFeed, setCurrentFeed] = useState({
         posts: true,
         likes: false,
@@ -22,58 +26,80 @@ const Profile = () => {
     });
     const { userId } = useParams();
     let {user, authTokens, fetchUserData} = useContext(AuthContext);
-    const location = useLocation();
-    const data = location.state;
 
-    let handleFeed = (e) => {
+    const handleFeed = (e) => {
 
         e.preventDefault();
 
         if (e.target.textContent.toLowerCase() === "posts") {
-            setCurrentFeed({
-                posts: true,
-                likes: false,
-                following: false,
-                followed: false
-            })
+
+            if (!currentFeed.posts) {
+                setProfileUserPosts([]);
+                setFeedLoading(true);
+                setCurrentFeed({
+                    posts: true,
+                    likes: false,
+                    following: false,
+                    followed: false
+                })
+            fetchProfileUserPosts();
+            }
         } else if (e.target.textContent.toLowerCase() === "likes") {
-            setCurrentFeed({
-                posts: false,
-                likes: true,
-                following: false,
-                followed: false
-            })
+
+            if (!currentFeed.likes) {
+                setProfileLikes([]);
+                setFeedLoading(true);
+                setCurrentFeed({
+                    posts: false,
+                    likes: true,
+                    following: false,
+                    followed: false
+                })
+                fetchProfileUserLikes();
+            }
         } else if (e.target.textContent.toLowerCase().trim() === "following") {
-            setCurrentFeed({
-                posts: false,
-                likes: false,
-                following: true,
-                followed: false
-            })
+
+            if (!currentFeed.following) {
+                setProfileFollowing([]);
+                setFeedLoading(true);
+                setCurrentFeed({
+                    posts: false,
+                    likes: false,
+                    following: true,
+                    followed: false
+                })
+                fetchProfileUserFollowing();
+            }
         } else {
-            setCurrentFeed({
-                posts: false,
-                likes: false,
-                following: false,
-                followed: true
-            })
+
+            if (!currentFeed.followed) {
+                setProfileFollowed([]);
+                setFeedLoading(true);
+                setCurrentFeed({
+                    posts: false,
+                    likes: false,
+                    following: false,
+                    followed: true
+                })
+                fetchProfileUserFollowed();
+            }
         }
     }
 
-    let handleFollow = (e) => {
+    const handleFollow = (e) => {
 
         const headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + String(authTokens.access)
         }
 
-        let followUser = async () => {
+        const followUser = async () => {
             await axios.post("/api/follow-follow/", {
                 "follower": user.id,
                 "followee": e.target.id
             }, {headers: headers})
             .then(res => {
-                let fetchProfileUserData = async () => {
+                const fetchProfileUserData = async () => {
                     await axios.get(`/api/user-single/${profileUser.id}/`)
                     .then(res => {
                         setProfileUser(res.data);
@@ -90,14 +116,13 @@ const Profile = () => {
             });
         }
 
-        let unfollowUser = async () => {
+        const unfollowUser = async () => {
             await axios.post("/api/follow-unfollow/", {
                 "follower": user.id,
                 "followee": e.target.id
             }, {headers: headers})
             .then(res => {
-                console.log(res);
-                let fetchProfileUserData = async () => {
+                const fetchProfileUserData = async () => {
                     await axios.get(`/api/user-single/${profileUser.id}/`)
                     .then(res => {
                         setProfileUser(res.data);
@@ -121,46 +146,88 @@ const Profile = () => {
         }
     }
 
+    const fetchProfileUserPosts = async () => {
+        await axios.get(`/api/user-posts/${userId}/`)
+        .then(res => {
+            setTimeout(() => {
+                setFeedLoading(false);
+                setProfileUserPosts(res.data);
+            }, 1000);                
+        })
+        .catch(e => {
+            console.log(e.response);
+        });
+    }
+
+    const fetchProfileUserLikes = async () => {
+        await axios.get(`/api/user-likes/${userId}/`)
+        .then(res => {
+            setTimeout(() => {
+                setFeedLoading(false);
+                setProfileLikes(res.data);
+            }, 1000);
+        })
+        .catch(e => {
+            console.log(e.response);
+        });
+    }
+
+    const fetchProfileUserFollowing = async () => {
+        await axios.get(`/api/following-list/${userId}/`)
+        .then(res => {
+            setTimeout(() => {
+                setFeedLoading(false);
+                setProfileFollowing(res.data);
+            }, 1000);
+        })
+        .catch(e => {
+            console.log(e.response);
+        });
+    }
+
+    const fetchProfileUserFollowed = async () => {
+        await axios.get(`/api/followed-list/${userId}/`)
+        .then(res => {
+            setTimeout(() => {
+                setFeedLoading(false);
+                setProfileFollowed(res.data);
+            }, 1000);
+        })
+        .catch(e => {
+            console.log(e.response);
+        });
+    }
+
     useEffect(() => {
 
-        if (data?.fromPost) {
-            window.scrollTo(0, 0);
-            setCurrentFeed((currentFeed) => ({
-                ...currentFeed,
-                posts: true
-            }));
-            data.fromPost = false;
-        } else {
-            setCurrentFeed((currentFeed) => ({
-                ...currentFeed
-            }));
-        }
-        
-        let fetchProfileUserData = async () => {
+        window.scrollTo(0, 0);
+        setFeedLoading(true);
+        setHeaderLoading(true);        
+        setProfileUserPosts([]);
+        setCurrentFeed(() => ({
+            posts: true,
+            likes: false,
+            following: false,
+            followed: false
+        }));
+
+        const fetchProfileUserData = async () => {
             await axios.get(`/api/user-single/${userId}/`)
             .then(res => {
-                setProfileUser(res.data);
-                setProfileUserPosts(res.data.user_posts);
+                setTimeout(() => {
+                    setProfileUser(res.data);
+                    setHeaderLoading(false);
+                    setFeedLoading(false);
+                    setProfileUserPosts(res.data.user_posts);
+                }, 1000);                
             })
             .catch(e => {
                 console.log(e.response);
             });
         }
-
-        let fetchProfileUserLikes = async () => {
-            await axios.get(`/api/user-likes/${userId}/`)
-            .then(res => {
-                setProfileLikes(res.data);
-            })
-            .catch(e => {
-                console.log(e.response);
-            });
-        }
-
         fetchProfileUserData();
-        fetchProfileUserLikes();
 
-    }, [userId, user]);
+    }, [userId]);
 
     return (
         <div className="profile">
@@ -174,6 +241,7 @@ const Profile = () => {
                     bio={ profileUser.bio }
                     follows={ profileUser.user_follows?.length }
                     followed={ profileUser.user_followed?.length }
+                    headerLoading={ headerLoading }
                     handleFeed={ handleFeed }
                     handleFollow={ handleFollow }
                     setProfileUser={ setProfileUser }
@@ -182,24 +250,28 @@ const Profile = () => {
                     <ProfileFeed 
                     posts={ profileUserPosts.map(post => (post)).reverse() }
                     setProfileUserPosts={ setProfileUserPosts }
+                    feedLoading={ feedLoading }
                     />
                     ): null}
                     {currentFeed.likes ? (
                     <ProfileFeed 
                     posts={ profileLikes?.map(post => (post)) }
                     setProfileLikes={ setProfileLikes }
+                    feedLoading={ feedLoading }
                     />
                     ): null}
                     {currentFeed.following ? (
                     <UserFeedFollowing 
-                    users={ profileUser.user_follows?.map(user => (user)).reverse() }
+                    users={ profileFollowing?.map(user => (user)).reverse() }
                     handleFollow={ handleFollow }
+                    feedLoading={ feedLoading }
                     />
                     ): null}
                     {currentFeed.followed ? (
                     <UserFeedFollowed 
-                    users={ profileUser.user_followed?.map(user => (user)).reverse() }
+                    users={ profileFollowed?.map(user => (user)).reverse() }
                     handleFollow={ handleFollow }
+                    feedLoading={ feedLoading }
                     />
                     ): null}
                 </div>

@@ -4,17 +4,22 @@ import axios from "../axios";
 import Post from './Post';
 import CreatePost from './CreatePost';
 import AuthContext from '../context/AuthContext';
+import { CircularProgress } from '@mui/material';
 
 const HomeFeed = () => {
 
     const [posts, setPosts] = useState([]);
     let {user} = useContext(AuthContext);
+    const [feedLoading, setFeedLoading] = useState(true);
 
     useEffect(() => {
         async function fetchPosts() {
             await axios.get("/api/post-list/")
             .then(res => {
-                setPosts(res.data);
+                setTimeout(() => {
+                    setPosts(res.data);
+                    setFeedLoading(false);
+                }, 1000);
             })
             .catch(e => {
                 console.log(e.response);
@@ -28,6 +33,11 @@ const HomeFeed = () => {
         <div className="homefeed">
             {user ? (
             <CreatePost />
+            ): null}
+            {feedLoading ? (
+            <div className="progress">
+                <CircularProgress />
+            </div>
             ): null}
             {posts.map((post) => (
                 <Post 

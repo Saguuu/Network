@@ -3,8 +3,9 @@ import "./ProfileHeader.css";
 import AuthContext from '../context/AuthContext';
 import Modal from './Modal';
 import axios from "../axios";
+import Skeleton from '@mui/material/Skeleton';
 
-const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow, setProfileUser }) => {
+const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow, setProfileUser, headerLoading }) => {
 
     let {user, authTokens, fetchUserData} = useContext(AuthContext);
     let isFollowing = false;
@@ -64,6 +65,14 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
             sendChanges={ sendChanges }
             >
             </Modal>
+            {headerLoading ? (
+            <>
+            <Skeleton className="load__circle" variant="circular" width={ 150 } height={ 150 } animation={ false }/>
+            <Skeleton className="load__rectangle" variant="rectangular" width={ 400 } height={ 30 } animation={ false }/>
+            <Skeleton className="load__rectangle" variant="rectangular" width={ 400 } height={ 30 } animation={ false }/>
+            </>
+            ) :
+            <>
             <div className="profileheader__top">
                 <div className="profileheader__topLeft">
                     <img className="profileheader__topLeftImage" src={ image } alt="" />
@@ -104,6 +113,8 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
                     <p>Likes</p>  
                 </div>
             </div>
+            </> 
+            }
         </div>
     );
 }

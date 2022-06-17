@@ -3,11 +3,13 @@ import "./FollowFeed.css";
 import axios from "../axios";
 import Post from './Post';
 import AuthContext from '../context/AuthContext';
+import { CircularProgress } from '@mui/material';
 
 const FollowFeed = () => {
 
     const [posts, setPosts] = useState([]);
     let {user, authTokens, logoutUser} = useContext(AuthContext);
+    const [feedLoading, setFeedLoading] = useState(true);
 
     useEffect(() => {
         let fetchPosts = async () => {
@@ -18,7 +20,10 @@ const FollowFeed = () => {
                 }
             })
             .then(res => {
-                setPosts(res.data);
+                setTimeout(() => {
+                    setPosts(res.data);
+                    setFeedLoading(false);
+                }, 1000);
             })
             .catch(e => {
                 console.log(e.response);
@@ -31,6 +36,11 @@ const FollowFeed = () => {
 
     return (
         <div className="followfeed">
+            {feedLoading ? (
+            <div className="progress">
+                <CircularProgress />
+            </div>
+            ): null}
             {posts.map((post) => (
                 <Post 
                 image={ post.poster_image }
