@@ -194,18 +194,18 @@ def postFollowing(request, pk):
 @api_view(["GET"])
 def followFollowedBy(request, pk):
 
-    following = Follow.objects.all().filter(followee=pk)
+    following = Follow.objects.all().filter(followee=pk).order_by("id")
     serializer = FollowSerializer(following, many=True)
 
-    return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
+    return Response(serializer.data)
 
 @api_view(["GET"])
 def followFollowing(request, pk):
 
-    following = Follow.objects.all().filter(follower=pk)
+    following = Follow.objects.all().filter(follower=pk).order_by("id")
     serializer = FollowSerializer(following, many=True)
 
-    return Response(sorted(serializer.data, key=lambda d: d["id"], reverse=True))
+    return Response(serializer.data)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
