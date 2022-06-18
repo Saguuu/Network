@@ -32,7 +32,10 @@ const HomeFeed = () => {
     return (
         <div className="homefeed">
             {user ? (
-            <CreatePost />
+            <CreatePost 
+            posts={ posts }
+            setPosts={ setPosts }
+            />
             ): null}
             {feedLoading ? (
             <div className="progress">

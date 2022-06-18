@@ -43,6 +43,7 @@ def apiOverview(request):
         "Create Post": "/post-create/",
         "Update Post": "/post-update/<str:pk>/",
         "Delete Post": "/post-delete/<str:pk>/",
+        "Get Las User Post": "/post-last/<str:pk>/",
         "Follow User": "/follow-follow/",
         "Unfollow User": "/follow-unfollow/",
         "Like post": "/like-like/",
@@ -169,6 +170,15 @@ def postDelete(request, pk):
             return("Post does not exist")
 
     return Response("Post Deleted")
+
+@api_view(["GET"])
+def postLast(request, pk):
+    
+    last_post = Post.objects.all().filter(poster=pk).last()
+
+    serializer = PostSerializer(last_post, many=False)
+
+    return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

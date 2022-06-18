@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import "./CreatePost.css";
 import axios from '../axios';
 
-const CreatePost = () => {
+const CreatePost = ({ posts, setPosts }) => {
 
     let {user, authTokens} = useContext(AuthContext);
 
     let postCreate = async (e) => {
+
+        e.preventDefault();
 
         await axios.post("/api/post-create/", {
             "content": e.target.parentNode.parentNode.childNodes[0].childNodes[1].value
@@ -18,7 +20,18 @@ const CreatePost = () => {
             }
         })
         .then(res => {
-            console.log(res.data)
+            e.target.parentNode.parentNode.childNodes[0].childNodes[1].value = "";
+            console.log(res.data);
+            let updateState = async () => {
+                await axios.get(`/api/post-last/${user.id}/`)
+                .then(res => {
+                    setPosts([res.data, ...posts]);
+                })
+                .catch(e => {
+                    console.log(e.response);
+                })
+            }
+            updateState();
         })
         .catch(e => {
             console.log(e.response);
