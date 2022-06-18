@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import "./Login.css";
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,7 @@ import AuthContext from '../context/AuthContext';
 
 const Login = () => {
 
+    // Grab helper function
     let {loginUser} = useContext(AuthContext)
 
     return (

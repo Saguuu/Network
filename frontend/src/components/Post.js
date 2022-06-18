@@ -11,6 +11,7 @@ import axios from "../axios";
 
 const Post = ({ id, userId, poster, image, content, likes, date, comments, posts, setPosts, setProfileLikes, setProfileUserPosts }) => {
 
+    // Initialize state
     const {user, authTokens, fetchUserData} = useContext(AuthContext);
     const [isLiked, setIsLiked] = useState(false);
     const [showComments, setShowComments] = useState(false);
@@ -47,9 +48,17 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
     
     }
 
+    // Calculate date of post creation
     newDate = calcDate(date);
 
     let like = async (e) => {
+
+        e.preventDefault();
+
+        if (!user) {
+            console.log("Log in to like posts");
+            return
+        }
 
         const headers = {
             "Content-Type": "application/json",
@@ -60,17 +69,24 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
             "liker": user.id,
             "post": id
         }, {headers: headers})
-        .then(res => {
+        .then(() => {
             fetchUserData();
             setIsLiked(true);
             setPostLikes(postLikes + 1);
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
 
     let unLike = async (e) => {
+
+        e.preventDefault();
+
+        if (!user) {
+            console.log("Log in to like posts");
+            return
+        }
 
         const headers = {
             "Content-Type": "application/json",
@@ -81,17 +97,17 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
             "liker": user.id,
             "post": id
         }, {headers: headers})
-        .then(res => {
+        .then(() => {
             fetchUserData();
             setIsLiked(false);
             setPostLikes(postLikes - 1);
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
 
-    let toggleComments = (e) => {
+    let toggleComments = () => {
         if (showComments === true) {
             setShowComments(false);
             setShowCommentsClicked(false);
@@ -103,8 +119,11 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
 
     let handleDelete = async (e) => {
 
+        e.preventDefault();
+
         if (isCurrentUser) {
 
+            // Locate post in posts state and remove it, send delete request to backend
             const isPost = (post) => post.id === id;
             const index = posts.findIndex(isPost);
             posts.splice(index, 1);
@@ -115,8 +134,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                     "Authorization": "Bearer " + String(authTokens.access)
                     }
             })
-            .then(res => {
-                console.log(res);
+            .then(() => {
                 if (setPosts) {
                     setPosts([...posts]);
                 } else if (setProfileLikes) {
@@ -125,7 +143,7 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                     setProfileUserPosts([...posts]);
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             })
         } else {
@@ -150,17 +168,17 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                 "Authorization": "Bearer " + String(authTokens.access)
             }
 
+            // Send update request to backend depending on source of edit request
             if (from === "Post") {
         
                 await axios.post(`/api/post-update/${id}/`, {
                     "id": user.id,
                     "content": newContent,
                 }, {headers: headers})
-                .then(res => {
-                    console.log(res);
+                .then(() => {
                     fetchUserData();
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e.response);
                 });
             } else {
@@ -169,14 +187,15 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
                     "id": user.id,
                     "content": newContent,
                 }, {headers: headers})
-                .then(res => {
-                    console.log(res);
+                .then(() => {
+
+                    // Locate comment in state and update its content and host post state
                     const isComment = (comment) => comment.id === id;
                     const index = postComments.findIndex(isComment);
                     postComments[index].content = newContent;
                     setPostComments([...postComments]);
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e.response);
                 });
             }  

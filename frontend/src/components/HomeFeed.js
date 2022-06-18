@@ -8,20 +8,23 @@ import { CircularProgress } from '@mui/material';
 
 const HomeFeed = () => {
 
+    // Initialize state
     const [posts, setPosts] = useState([]);
     let {user} = useContext(AuthContext);
     const [feedLoading, setFeedLoading] = useState(true);
 
     useEffect(() => {
+
+        // Fetch all posts from beckend
         async function fetchPosts() {
             await axios.get("/api/post-list/")
-            .then(res => {
+            .then((res) => {
                 setTimeout(() => {
                     setPosts(res.data);
                     setFeedLoading(false);
                 }, 1000);
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             });
         }

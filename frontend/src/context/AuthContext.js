@@ -9,6 +9,7 @@ export default AuthContext;
 
 export const AuthProvider = ({children}) => {
 
+    // Grab current localstorage data if any exists and set initial state
     let authState = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     let id = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).id : null;
     let username = localStorage.getItem("authTokens") ? jwt_decode(localStorage.getItem("authTokens")).username : null;
@@ -33,13 +34,14 @@ export const AuthProvider = ({children}) => {
         }
 
         let create = async () => {
+
+            // Send register request to backend and implement error messaging on invalid input
             await axios.post("/api/user-register/", {
                 "username": e.target.parentNode.childNodes[1].value,
                 "password1": e.target.parentNode.childNodes[3].value,
                 "password2": e.target.parentNode.childNodes[5].value
             }, {headers: headers})
-            .then(res => {
-                console.log(res);
+            .then((res) => {
                 if (res.status === 202) {
                     e.target.parentNode.childNodes[1].style.border = "1px solid red";
                     e.target.parentNode.childNodes[3].style.border = "1px solid red";
@@ -54,7 +56,7 @@ export const AuthProvider = ({children}) => {
                     loginUser(e);
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             })
         }
@@ -69,23 +71,24 @@ export const AuthProvider = ({children}) => {
             "Content-Type": "application/json"
         }
 
+        // Verify credentials, load response to localstorage and set user state
         let verify = async () => {
             await axios.post("/api/token/", {
                 "username": e.target.parentNode.childNodes[1].value,
                 "password": e.target.parentNode.childNodes[3].value
             }, {headers: headers})
-            .then(res => {
+            .then((res) => {
                 setAuthTokens(res.data);    
                 setUser({
                     "id": jwt_decode(res.data.access).id,
                     "username": jwt_decode(res.data.access).username,
                     "image": jwt_decode(res.data.access).image,
                 });
-                localStorage.setItem("authTokens", JSON.stringify(res.data))
+                localStorage.setItem("authTokens", JSON.stringify(res.data));
                 setLoading(true);
                 navigate("/");
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             });
         }
@@ -103,26 +106,26 @@ export const AuthProvider = ({children}) => {
     }
 
     let updateToken = async () => {
-        console.log("update tokens");
 
         const headers = {
             "Content-Type": "application/json"
         }
 
+        // Send request for new tokens, logout if fails
         if (authTokens) {
             await axios.post("/api/token/refresh/", {
                 "refresh": JSON.parse(localStorage.getItem("authTokens"))?.refresh
             }, {headers: headers})
-            .then(res => {
+            .then((res) => {
                 setAuthTokens(res.data);    
                 setUser((user) => ({
                     ...user,
                     id: jwt_decode(res.data.access).id,
                     username: jwt_decode(res.data.access).username
                 }));
-                localStorage.setItem("authTokens", JSON.stringify(res.data))
+                localStorage.setItem("authTokens", JSON.stringify(res.data));
             })
-            .catch(e => {
+            .catch((e) => {
                 if(!(e.response.data.detail === "Token is blacklisted")) {
                     console.log(e.response);
                     logoutUser();
@@ -136,9 +139,10 @@ export const AuthProvider = ({children}) => {
 
     let fetchUserData = async () => {
 
+        // Fetch new user data if neccesary to update state
         if (user) {
             await axios.get(`/api/user-single/${user?.id}/`)
-            .then(res => {
+            .then((res) => {
                 setUser((user) => ({
                     ...user,
                     image: res.data.image,
@@ -150,13 +154,14 @@ export const AuthProvider = ({children}) => {
                     comments: res.data.user_comments
                 }));
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             });
         }
         setLoading(false);
     }
 
+    // Initialize helper data
     let contextData = {
         user:user,
         authTokens:authTokens,
@@ -179,6 +184,7 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {  
 
+        // Initialize reccuring token update cycle
         let interval = setInterval(() => {
             if (authTokens) {
                 updateToken();

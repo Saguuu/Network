@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link, } from 'react-router-dom';
 import "./Nav.css";
 import HomeIcon from '@mui/icons-material/Home';
@@ -13,11 +13,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 const Nav = ({ location, userId }) => {
 
+    // Initialize state
     let {user, logoutUser} = useContext(AuthContext);
+
+    // Handle css for current directory
     let homeStyle = 1;
     let followingStyle = 1;
     let profileStyle = 1;
-    userId = parseInt(userId, 10)
+    userId = parseInt(userId, 10);
 
     if (location === "home") {
         homeStyle = .3;
@@ -28,11 +31,6 @@ const Nav = ({ location, userId }) => {
             profileStyle = .3;
         }
     }
-    
-
-    useEffect(() => {
-
-    },[user]);
 
     return (
     <div className="nav">

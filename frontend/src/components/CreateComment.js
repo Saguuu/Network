@@ -5,9 +5,19 @@ import axios from "../axios";
 
 const CreateComment = ({ postId, setPostComments }) => {
 
-    let {user, authTokens, fetchUserData} = useContext(AuthContext);
+    // Initialize state
+    let {user, authTokens} = useContext(AuthContext);
 
     let comment = async (e) => {
+
+        let content = e.target.parentNode.childNodes[1].value
+
+        // Verify content integrity
+        if (content.length <= 0 || content.length > 100) {
+            console.log("Comment too long or too short");
+            return
+        }
+
         const headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + String(authTokens.access)
@@ -16,33 +26,35 @@ const CreateComment = ({ postId, setPostComments }) => {
         await axios.post("/api/comment-comment/", {
             "commenter": user.id,
             "post": postId,
-            "content": e.target.parentNode.childNodes[1].value
+            "content": content
         }, {headers: headers})
-        .then(res => {
+        .then(() => {
             // Fetch users last comment from database to set post comments and re-render post component
             let getNewComment = async () => {
-                await axios.get(`/api/comment-last/${user.id}`, 
+                await axios.get(`/api/comment-last/${user.id}/`, 
                 {headers: headers})
-                .then(res => {
+                .then((res) => {
                     setPostComments((comments) => (
                         [...comments, res.data]
                     ))
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e.response);
                 })
             }
             getNewComment();
+
+            // Set inputfield to null
             e.target.parentNode.childNodes[1].value="";
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
 
     return (
         <div className="createcomment">
-            <img className="createcomment__image" src={user.image} />
+            <img className="createcomment__image" src={user.image} alt="user_img"/>
             <textarea className="createcomment__content" placeholder="Give your thoughts!"/>
             <button className="createcomment__button" onClick={ comment }>Send</button>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
 import "./FollowFeed.css";
 import axios from "../axios";
 import Post from './Post';
@@ -7,31 +8,39 @@ import { CircularProgress } from '@mui/material';
 
 const FollowFeed = () => {
 
+    // Initialize state
     const [posts, setPosts] = useState([]);
     let {user, authTokens, logoutUser} = useContext(AuthContext);
     const [feedLoading, setFeedLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        let fetchPosts = async () => {
-            await axios.get(`/api/post-following/${user.id}/`, {
-                headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + String(authTokens.access)
-                }
-            })
-            .then(res => {
-                setTimeout(() => {
-                    setPosts(res.data);
-                    setFeedLoading(false);
-                }, 1000);
-            })
-            .catch(e => {
-                console.log(e.response);
-                logoutUser();
-            });
+        
+        // Check if user exists
+        if(!user) {
+            navigate("/");
+        } else {
+            // Retrieve posts by following from backend
+            let fetchPosts = async () => {
+                await axios.get(`/api/post-following/${user.id}/`, {
+                    headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + String(authTokens.access)
+                    }
+                })
+                .then((res) => {
+                    setTimeout(() => {
+                        setPosts(res.data);
+                        setFeedLoading(false);
+                    }, 1000);
+                })
+                .catch((e) => {
+                    console.log(e.response);
+                    logoutUser();
+                });
+            }
+            fetchPosts();
         }
-
-        fetchPosts();
     }, [user])
 
     return (

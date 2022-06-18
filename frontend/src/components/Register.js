@@ -6,6 +6,7 @@ import AuthContext from '../context/AuthContext';
 
 const Register = () => {
 
+    // Grab helper function
     let {registerUser} = useContext(AuthContext)
 
     return (

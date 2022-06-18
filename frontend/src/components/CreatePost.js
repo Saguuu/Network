@@ -5,37 +5,49 @@ import axios from '../axios';
 
 const CreatePost = ({ setPosts }) => {
 
+    // Initialize state
     let {user, authTokens} = useContext(AuthContext);
 
     let postCreate = async (e) => {
 
         e.preventDefault();
+        
+        let content = e.target.parentNode.parentNode.childNodes[0].childNodes[1].value;
+
+        // Verify content integrity
+        if (content.length <= 0 || content.length > 100) {
+            console.log("Post too long or too short");
+            return
+        }
 
         await axios.post("/api/post-create/", {
-            "content": e.target.parentNode.parentNode.childNodes[0].childNodes[1].value
+            "content": content
         }, { 
             headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + String(authTokens.access) 
             }
         })
-        .then(res => {
+        .then(() => {
+
+            // Reset input field to empty string
             e.target.parentNode.parentNode.childNodes[0].childNodes[1].value = "";
-            console.log(res.data);
+
+            // Fetch users latest post from db then add it to feed state
             let updateState = async () => {
                 await axios.get(`/api/post-last/${user.id}/`)
-                .then(res => {
+                .then((res) => {
                     setPosts((posts) => 
                         [res.data, ...posts]
                     );
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e.response);
                 })
             }
             updateState();
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }

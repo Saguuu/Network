@@ -63,6 +63,7 @@ def userRegister(request):
     pass1 = request.data["password1"]
     pass2 = request.data["password2"]
 
+    # Check if username already in use, if not create new user and corresponding siteUser instances
     exists = User.objects.filter(username__icontains=username).exists()
 
     if exists or (pass1 != pass2):
@@ -78,6 +79,7 @@ def userRegister(request):
 @api_view(["GET"])
 def userList(request):
 
+    # Return list of all users
     users = siteUser.objects.all()
     serializer = siteUserSerializer(users, many=True)
 
@@ -86,6 +88,7 @@ def userList(request):
 @api_view(["GET"])
 def userSingle(request, pk):
 
+    # Return data one single user
     user = siteUser.objects.get(id=pk)
     serializer = siteUserSerializer(user, many=False)
 
@@ -94,6 +97,7 @@ def userSingle(request, pk):
 @api_view(["GET"])
 def userLikes(request, pk):
 
+    # Return list of all posts that a user has liked
     response = []
     likes = Like.objects.all().filter(liker=pk).order_by("-id")
 
@@ -107,6 +111,7 @@ def userLikes(request, pk):
 @api_view(["GET"])
 def userPosts(request, pk):
 
+    # Return list of all posts of a specific user
     posts = Post.objects.all().filter(poster=pk)
     serializer = PostSerializer(posts, many=True)
 
@@ -115,6 +120,7 @@ def userPosts(request, pk):
 @api_view(["GET"])
 def postList(request):
 
+    # Return list of all posts in db
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
 
@@ -123,6 +129,7 @@ def postList(request):
 @api_view(["GET"])
 def postSingle(request, pk):
 
+    # Return single post by id
     post = Post.objects.get(id=pk)
     serializer = PostSerializer(post, many=False)
 
@@ -132,6 +139,7 @@ def postSingle(request, pk):
 @permission_classes([IsAuthenticated])
 def postCreate(request):
 
+    # Create new post in db
     if len(request.data["content"]) <= 100 and len(request.data["content"]) > 0:
         new_post = Post(poster=request.user.site_user, content=request.data["content"])
         new_post.save()
@@ -142,6 +150,7 @@ def postCreate(request):
 @permission_classes([IsAuthenticated])
 def postUpdate(request, pk):
     
+    # Update post in db by id if authenticated and valid
     if request.user.is_anonymous:
         return Response("Rejected")
     else:
@@ -159,6 +168,7 @@ def postUpdate(request, pk):
 @permission_classes([IsAuthenticated])
 def postDelete(request, pk):
     
+    # Delete post in db by id if authenticated and valid
     if request.user.is_anonymous:
         return Response("Rejected")
     else:
@@ -166,16 +176,18 @@ def postDelete(request, pk):
         if post:
             if request.user.site_user.id == post.poster.id:
                 post.delete()
+            else:
+                return Response("Unauthorized")
         else:
-            return("Post does not exist")
+            return Response("Post does not exist")
 
     return Response("Post Deleted")
 
 @api_view(["GET"])
 def postLast(request, pk):
     
+    # Get last post made by given user by pk
     last_post = Post.objects.all().filter(poster=pk).last()
-
     serializer = PostSerializer(last_post, many=False)
 
     return Response(serializer.data)
@@ -204,6 +216,7 @@ def postFollowing(request, pk):
 @api_view(["GET"])
 def followFollowedBy(request, pk):
 
+    # Return Follow objects who are following a user by pk
     following = Follow.objects.all().filter(followee=pk).order_by("id")
     serializer = FollowSerializer(following, many=True)
 
@@ -212,6 +225,7 @@ def followFollowedBy(request, pk):
 @api_view(["GET"])
 def followFollowing(request, pk):
 
+    # Return Follow objects who are followed by a user by pk
     following = Follow.objects.all().filter(follower=pk).order_by("id")
     serializer = FollowSerializer(following, many=True)
 
@@ -221,6 +235,7 @@ def followFollowing(request, pk):
 @permission_classes([IsAuthenticated])
 def followFollow(request):
 
+    # Create new follow instance in db if authenticated, valid, and DNE
     follower = siteUser.objects.get(id=request.data["follower"])
     followee = siteUser.objects.get(id=request.data["followee"])
 
@@ -232,10 +247,11 @@ def followFollow(request):
         new_follow.save()
         return Response("User followed")
 
-@api_view(["POST"])
+@api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def followUnfollow(request):
     
+    # Delete follow object from db 
     unfollow = Follow.objects.all().filter(follower=request.data.get("follower"), followee=request.data.get("followee"))
     unfollow.delete()
 
@@ -245,6 +261,7 @@ def followUnfollow(request):
 @permission_classes([IsAuthenticated])
 def likeLike(request):
     
+    # Create like instance in db
     liker = siteUser.objects.get(id=request.data["liker"])
     post = Post.objects.get(id=request.data["post"])
 
@@ -260,6 +277,7 @@ def likeLike(request):
 @permission_classes([IsAuthenticated])
 def likeUnlike(request):
     
+    # Delete like instance in db
     unlike = Like.objects.all().filter(liker=request.data.get("liker"), post=Post.objects.get(id=request.data["post"]))
     unlike.delete()
 
@@ -269,6 +287,7 @@ def likeUnlike(request):
 @permission_classes([IsAuthenticated])
 def commentComment(request):
     
+    # Create comment on a post in db
     commenter = siteUser.objects.get(id=request.data["commenter"])
     post = Post.objects.get(id=request.data["post"])
     content = request.data["content"]
@@ -281,6 +300,7 @@ def commentComment(request):
 @permission_classes([IsAuthenticated])
 def commentUncomment(request, pk):
     
+    # Delete comment on a post in db
     if request.user.is_anonymous:
         return Response("Rejected")
     else:
@@ -297,6 +317,7 @@ def commentUncomment(request, pk):
 @permission_classes([IsAuthenticated])
 def commentUpdate(request, pk):
     
+    # Update comment by pk in db
     if request.user.is_anonymous:
         return Response("Rejected")
     else:
@@ -313,8 +334,8 @@ def commentUpdate(request, pk):
 @api_view(["GET"])
 def commentGetLastComment(request, pk):
     
+    # Return users last made comment by pk
     last_comment = Comment.objects.all().filter(poster=pk).last()
-
     serializer = CommentSerializer(last_comment, many=False)
 
     return Response(serializer.data)
@@ -323,6 +344,7 @@ def commentGetLastComment(request, pk):
 @permission_classes([IsAuthenticated])
 def editProfile(request):
     
+    # Edit user data in db
     user = siteUser.objects.get(id=request.data["id"])
     new_bio = request.data["bio"].strip()
     new_image = request.data["image"].strip()

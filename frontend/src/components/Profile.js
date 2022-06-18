@@ -11,6 +11,7 @@ import UserFeedFollowed from './UserFeedFollowed';
 
 const Profile = () => {
 
+    // Initialize state
     const [profileUserPosts, setProfileUserPosts] = useState([]);
     const [profileUser, setProfileUser] = useState([]);
     const [profileLikes, setProfileLikes] = useState([]);
@@ -31,6 +32,7 @@ const Profile = () => {
 
         e.preventDefault();
 
+        // Handle current feed and loading state
         if (e.target.textContent.toLowerCase() === "posts") {
 
             if (!currentFeed.posts) {
@@ -88,53 +90,59 @@ const Profile = () => {
 
     const handleFollow = (e) => {
 
+        e.preventDefault();
+
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + String(authTokens.access)
+            "Authorization": "Bearer " + String(authTokens?.access)
         }
 
         const followUser = async () => {
             await axios.post("/api/follow-follow/", {
-                "follower": user.id,
+                "follower": user?.id,
                 "followee": e.target.id
             }, {headers: headers})
-            .then(res => {
+            .then(() => {
+
+                // Grab new profileuser and user data to update state
                 const fetchProfileUserData = async () => {
                     await axios.get(`/api/user-single/${profileUser.id}/`)
-                    .then(res => {
+                    .then((res) => {
                         setProfileUser(res.data);
                     })
-                    .catch(e => {
+                    .catch((e) => {
                         console.log(e.response);
                     });
                 }
                 fetchProfileUserData();
                 fetchUserData();
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             });
         }
 
         const unfollowUser = async () => {
             await axios.post("/api/follow-unfollow/", {
-                "follower": user.id,
+                "follower": user?.id,
                 "followee": e.target.id
             }, {headers: headers})
-            .then(res => {
+            .then(() => {
+
+                // Grab new profileuser and user data to update state
                 const fetchProfileUserData = async () => {
                     await axios.get(`/api/user-single/${profileUser.id}/`)
-                    .then(res => {
+                    .then((res) => {
                         setProfileUser(res.data);
                     })
-                    .catch(e => {
+                    .catch((e) => {
                         console.log(e.response);
                     });
                 }
                 fetchProfileUserData();
                 fetchUserData();
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             });
         }
@@ -146,60 +154,62 @@ const Profile = () => {
         }
     }
 
+    // Helper functions for handling profile navigation actions and state updating
     const fetchProfileUserPosts = async () => {
         await axios.get(`/api/user-posts/${userId}/`)
-        .then(res => {
+        .then((res) => {
             setTimeout(() => {
                 setFeedLoading(false);
                 setProfileUserPosts(res.data);
             }, 1000);                
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
 
     const fetchProfileUserLikes = async () => {
         await axios.get(`/api/user-likes/${userId}/`)
-        .then(res => {
+        .then((res) => {
             setTimeout(() => {
                 setFeedLoading(false);
                 setProfileLikes(res.data);
             }, 1000);
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
 
     const fetchProfileUserFollowing = async () => {
         await axios.get(`/api/following-list/${userId}/`)
-        .then(res => {
+        .then((res) => {
             setTimeout(() => {
                 setFeedLoading(false);
                 setProfileFollowing(res.data);
             }, 1000);
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
 
     const fetchProfileUserFollowed = async () => {
         await axios.get(`/api/followed-list/${userId}/`)
-        .then(res => {
+        .then((res) => {
             setTimeout(() => {
                 setFeedLoading(false);
                 setProfileFollowed(res.data);
             }, 1000);
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
 
     useEffect(() => {
 
+        // Navigate to top of page on load, set new state
         window.scrollTo(0, 0);
         setFeedLoading(true);
         setHeaderLoading(true);        
@@ -211,17 +221,18 @@ const Profile = () => {
             followed: false
         }));
 
+        // Fetch data for current profile
         const fetchProfileUserData = async () => {
             await axios.get(`/api/user-single/${userId}/`)
-            .then(res => {
+            .then((res) => {
+                setProfileUser(res.data);
+                setHeaderLoading(false);
                 setTimeout(() => {
-                    setProfileUser(res.data);
-                    setHeaderLoading(false);
                     setFeedLoading(false);
                     setProfileUserPosts(res.data.user_posts);
                 }, 1000);                
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e.response);
             });
         }

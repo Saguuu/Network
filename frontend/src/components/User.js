@@ -5,11 +5,12 @@ import AuthContext from '../context/AuthContext';
 
 const User = ({ id, image, username, bio, handleFollow }) => {
 
+    // Initialize state
     let {user} = useContext(AuthContext);
     let isFollowing = false;
-
     let isCurrentUser = false;
 
+    // Check if is current user or if current user follows this user
     if (user) {
         if (id === user.id) {
             isCurrentUser = true;

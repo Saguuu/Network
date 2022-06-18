@@ -7,10 +7,12 @@ import Skeleton from '@mui/material/Skeleton';
 
 const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow, setProfileUser, headerLoading, currentFeed }) => {
 
+    // Initialize state
     let {user, authTokens, fetchUserData} = useContext(AuthContext);
     let isFollowing = false;
     let isCurrentUser = false;
 
+    // Check if current user and if is following current profile if not
     if (user) {
         if (userId === user.id) {
             isCurrentUser = true;
@@ -26,9 +28,11 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
 
     let sendChanges = async (e) => {
 
+        e.preventDefault();
+
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + String(authTokens.access)
+            "Authorization": "Bearer " + String(authTokens?.access)
         }
 
         await axios.post("/api/edit-profile/", {
@@ -36,13 +40,15 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
             "bio": e.target.parentNode.parentNode.childNodes[0].childNodes[1].value,
             "image": e.target.parentNode.parentNode.childNodes[1].childNodes[1].value
         }, {headers: headers})
-        .then(res => {
+        .then(() => {
+
+            // Fetch new user data and profileuser data
             let fetchProfileUserData = async () => {
                 await axios.get(`/api/user-single/${userId}/`)
-                .then(res => {
+                .then((res) => {
                     setProfileUser(res.data);
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e.response);
                 });
             }
@@ -50,7 +56,7 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
             fetchUserData();
             setModalIsOpen(false);
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e.response);
         });
     }
