@@ -242,6 +242,7 @@ const Profile = () => {
                     follows={ profileUser.user_follows?.length }
                     followed={ profileUser.user_followed?.length }
                     headerLoading={ headerLoading }
+                    currentFeed={ currentFeed }
                     handleFeed={ handleFeed }
                     handleFollow={ handleFollow }
                     setProfileUser={ setProfileUser }

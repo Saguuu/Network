@@ -5,7 +5,7 @@ import Modal from './Modal';
 import axios from "../axios";
 import Skeleton from '@mui/material/Skeleton';
 
-const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow, setProfileUser, headerLoading }) => {
+const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow, setProfileUser, headerLoading, currentFeed }) => {
 
     let {user, authTokens, fetchUserData} = useContext(AuthContext);
     let isFollowing = false;
@@ -20,7 +20,7 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
                 isFollowing = true;
             }
         }
-    }
+    } 
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -96,22 +96,48 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
                 </p>
             </div>
             <div className="profileheader__bottom">
+                {!currentFeed.following ? (
                 <div className="profileheader__bottomOne" onClick={handleFeed}>
                     <p className="profileheader__bottomOneNumber">{follows} 
                     <span className="profileheader__bottomOneText">  Following</span></p>
                 </div>
+                ) : (
+                <div className="profileheader__bottomOneClicked" onClick={handleFeed}>
+                    <p className="profileheader__bottomOneNumber">{follows} 
+                    <span className="profileheader__bottomOneText">  Following</span></p>
+                </div>
+                )}
+                {!currentFeed.followed ? (
                 <div className="profileheader__bottomTwo" onClick={handleFeed}>
                     <p className="profileheader__bottomTwoNumber">{followed} 
                     <span className="profileheader__bottomTwoText">  Followers</span></p>
                 </div>
+                ) : (
+                <div className="profileheader__bottomTwoClicked" onClick={handleFeed}>
+                    <p className="profileheader__bottomTwoNumber">{followed} 
+                    <span className="profileheader__bottomTwoText">  Followers</span></p>
+                </div>
+                )}
             </div>
             <div className="profileheader__toolbar">
-                <div className="profileheader__toolbarItem" onClick={handleFeed} value="posts"> 
+                {!currentFeed.posts ? (
+                <div className="profileheader__toolbarItem" onClick={handleFeed}> 
                     <p>Posts</p> 
                 </div>
+                ) : (
+                <div className="profileheader__toolbarItemClicked" onClick={handleFeed}> 
+                    <p>Posts</p> 
+                </div>
+                )}
+                {!currentFeed.likes ? (
                 <div className="profileheader__toolbarItem" onClick={handleFeed}>
                     <p>Likes</p>  
                 </div>
+                 ) : (
+                <div className="profileheader__toolbarItemClicked" onClick={handleFeed}>
+                    <p>Likes</p>  
+                </div>
+                )}
             </div>
             </> 
             }
