@@ -7,7 +7,9 @@ const Home = () => {
     return (
         <div className="home">
             <div className="home__container">
-                <Nav />
+                <Nav 
+                location={ "home" }
+                />
                 <HomeFeed />
             </div>
         </div>

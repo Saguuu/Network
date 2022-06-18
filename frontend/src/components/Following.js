@@ -7,7 +7,9 @@ const Following = () => {
     return (
         <div className="following">
             <div className="following__container">
-                <Nav />
+                <Nav 
+                location={ "following" }
+                />
                 <FollowFeed />
             </div>
         </div>

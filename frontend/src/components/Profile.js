@@ -232,7 +232,10 @@ const Profile = () => {
     return (
         <div className="profile">
             <div className="profile__container">
-                <Nav />
+                <Nav
+                location={ "profile" } 
+                userId={ userId }
+                />
                 <div className="profile__content">
                     <ProfileHeader 
                     userId={ profileUser.id }

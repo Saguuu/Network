@@ -11,9 +11,24 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import AuthContext from '../context/AuthContext';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-const Nav = () => {
+const Nav = ({ location, userId }) => {
 
     let {user, logoutUser} = useContext(AuthContext);
+    let homeStyle = 1;
+    let followingStyle = 1;
+    let profileStyle = 1;
+    userId = parseInt(userId, 10)
+
+    if (location === "home") {
+        homeStyle = .3;
+    } else if (location === "following") {
+        followingStyle = .3;
+    } else {
+        if (userId === user?.id) {
+            profileStyle = .3;
+        }
+    }
+    
 
     useEffect(() => {
 
@@ -30,7 +45,7 @@ const Nav = () => {
             </Link>
             <Link to="/" style={{ textDecoration: 'none' }}>
             <div className="nav__item">
-                <HomeIcon fontSize="large" className="nav__itemImage"> 
+                <HomeIcon fontSize="large" className="nav__itemImage" style={{ opacity: homeStyle }}> 
                 </HomeIcon>
                 <div className="nav__itemText">
                     <h3>Home</h3>
@@ -40,7 +55,7 @@ const Nav = () => {
             {user ? (
             <Link to="/following" style={{ textDecoration: 'none' }}>
             <div className="nav__item">
-                <TagIcon fontSize="large" className="nav__itemImage"> 
+                <TagIcon fontSize="large" className="nav__itemImage" style={{ opacity: followingStyle }}> 
                 </TagIcon>
                 <div className="nav__itemText">
                     <h3>Following</h3>
@@ -60,7 +75,7 @@ const Nav = () => {
             {user ? (
             <Link to={`/user/${user.id}`} style={{ textDecoration: 'none' }}>
             <div className="nav__item">
-                <PersonIcon fontSize="large" className="nav__itemImage"> 
+                <PersonIcon fontSize="large" className="nav__itemImage" style={{ opacity: profileStyle }}> 
                 </PersonIcon>
                 <div className="nav__itemText">
                     <h3>Profile</h3>
