@@ -3,7 +3,7 @@ import AuthContext from '../context/AuthContext';
 import "./CreatePost.css";
 import axios from '../axios';
 
-const CreatePost = ({ posts, setPosts }) => {
+const CreatePost = ({ setPosts }) => {
 
     let {user, authTokens} = useContext(AuthContext);
 
@@ -25,7 +25,9 @@ const CreatePost = ({ posts, setPosts }) => {
             let updateState = async () => {
                 await axios.get(`/api/post-last/${user.id}/`)
                 .then(res => {
-                    setPosts([res.data, ...posts]);
+                    setPosts((posts) => 
+                        [res.data, ...posts]
+                    );
                 })
                 .catch(e => {
                     console.log(e.response);

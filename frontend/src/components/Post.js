@@ -27,7 +27,10 @@ const Post = ({ id, userId, poster, image, content, likes, date, comments, posts
 
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
         const formattedDate = new Date(inputDate);
-        const difference = Date.now() - formattedDate;
+        let difference = Date.now() - formattedDate;
+        if (difference < 0) {
+            difference = 0;
+        }
         let newDate;
 
         if (difference < 60000) { 

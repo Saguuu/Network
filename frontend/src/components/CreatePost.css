@@ -23,6 +23,7 @@
 .createpost__message {
 	padding: 5px;
     color: white;
+    border-radius: 15px;
 	font-family: Tahoma, sans-serif;
 	background-position: bottom right;
 	background-repeat: no-repeat;
@@ -40,6 +41,7 @@
 .createpost__button {
     background: #5b96e2;
     border-color: #488ccc #488ccc #488ccc;
+    margin-bottom: 10px;
     border-radius: 360px;
     border: 1px solid;
     color: #111;
@@ -72,8 +74,8 @@
     }
 
     .createpost__button {
-        width: 35px;
-        height: 20px;
+        width: 55px;
+        height: 30px;
         font-size: 10px;
     }
 }

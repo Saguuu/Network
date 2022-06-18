@@ -33,7 +33,6 @@ const CreateComment = ({ postId, setPostComments }) => {
                 })
             }
             getNewComment();
-            fetchUserData();
             e.target.parentNode.childNodes[1].value="";
         })
         .catch(e => {

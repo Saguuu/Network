@@ -194,6 +194,11 @@
         margin-top: 5px;
     }
 
+    .profileheader__toolbarItemClicked {
+        padding: 5px;
+        margin-top: 5px;
+    }
+
     .load__circle {
         width: 50px !important;
         height: 50px !important;
