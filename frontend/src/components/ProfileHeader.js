@@ -74,9 +74,9 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
             </Modal>
             {headerLoading ? (
             <>
-            <Skeleton className="load__circle" variant="circular" width={ 150 } height={ 150 } animation={ false }/>
-            <Skeleton className="load__rectangle" variant="rectangular" width={ 400 } height={ 30 } animation={ false }/>
-            <Skeleton className="load__rectangle" variant="rectangular" width={ 400 } height={ 30 } animation={ false }/>
+            <Skeleton className="load__circle" variant="circular" width={ 150 } height={ 150 }/>
+            <Skeleton className="load__rectangle" variant="rectangular" width={ 400 } height={ 30 }/>
+            <Skeleton className="load__rectangle" variant="rectangular" width={ 400 } height={ 30 }/>
             </>
             ) :
             <>
@@ -87,16 +87,19 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
                 </div>
                 <div className="profileheader__topRight">
                     {isCurrentUser ? (
-                        <Button id={userId} variant="contained" className="profileheader__topRightEdit" onClick={() => setModalIsOpen(true)} sx={{
+                        <Button id={userId} variant="outlined" className="profileheader__topRightEdit" onClick={() => setModalIsOpen(true)} sx={{
                             margin: 1,
                         }}>Edit Profile</Button>
-                        /*<button id={userId} className="profileheader__topRightButton" onClick={() => setModalIsOpen(true)}>Edit Profile</button>*/
                     ) : null}
                     {!isCurrentUser && isFollowing ? (
-                        <button id={userId} className="profileheader__topRightButtonUnfollow" onClick={handleFollow}>Unfollow</button>
+                        <Button id={userId} variant="containted" className="profileheader__topRightButtonUnfollow" onClick={handleFollow} sx={{
+                            margin: 1,
+                        }}>Unfollow</Button>
                     ): null}
                     {!isCurrentUser && !isFollowing ? (
-                        <button id={userId} className="profileheader__topRightButton" onClick={handleFollow}>Follow</button>
+                        <Button id={userId} variant="outlined" className="profileheader__topRightButton" onClick={handleFollow} sx={{
+                            margin: 1,
+                        }}>Follow</Button>
                     ): null}
                 </div>
             </div>

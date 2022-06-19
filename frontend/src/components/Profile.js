@@ -114,6 +114,7 @@ const Profile = () => {
                         console.log(e.response);
                     });
                 }
+                fetchProfileUserFollowed();
                 fetchProfileUserData();
                 fetchUserData();
             })
@@ -139,6 +140,7 @@ const Profile = () => {
                         console.log(e.response);
                     });
                 }
+                fetchProfileUserFollowed();
                 fetchProfileUserData();
                 fetchUserData();
             })
@@ -226,9 +228,9 @@ const Profile = () => {
             await axios.get(`/api/user-single/${userId}/`)
             .then((res) => {
                 setProfileUser(res.data);
-                setHeaderLoading(false);
                 setTimeout(() => {
                     setFeedLoading(false);
+                    setHeaderLoading(false);
                     setProfileUserPosts(res.data.user_posts);
                 }, 1000);                
             })

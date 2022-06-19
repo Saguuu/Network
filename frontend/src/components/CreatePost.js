@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import "./CreatePost.css";
 import axios from '../axios';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
 
 const CreatePost = ({ setPosts }) => {
 
@@ -12,7 +14,7 @@ const CreatePost = ({ setPosts }) => {
 
         e.preventDefault();
         
-        let content = e.target.parentNode.parentNode.childNodes[0].childNodes[1].value;
+        let content = e.currentTarget.parentNode.parentNode.childNodes[0].childNodes[1].value;
 
         // Verify content integrity
         if (content.length <= 0 || content.length > 100) {
@@ -31,7 +33,7 @@ const CreatePost = ({ setPosts }) => {
         .then(() => {
 
             // Reset input field to empty string
-            e.target.parentNode.parentNode.childNodes[0].childNodes[1].value = "";
+            e.currentTarget.parentNode.parentNode.childNodes[0].childNodes[1].value = "";
 
             // Fetch users latest post from db then add it to feed state
             let updateState = async () => {
@@ -61,7 +63,7 @@ const CreatePost = ({ setPosts }) => {
         </div>
         <div className="createpost__bottom">
             <div></div>
-            <button className="createpost__button" type="submit" onClick={postCreate}>Post</button>
+            <Button variant="contained" endIcon={<SendIcon />} className="createpost__button" onClick={postCreate}>Post</Button>
         </div>
     </div>
     </form>

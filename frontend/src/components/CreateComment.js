@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import "./CreateComment.css";
 import AuthContext from '../context/AuthContext';
 import axios from "../axios";
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
 
 const CreateComment = ({ postId, setPostComments }) => {
 
@@ -10,7 +12,7 @@ const CreateComment = ({ postId, setPostComments }) => {
 
     let comment = async (e) => {
 
-        let content = e.target.parentNode.childNodes[1].value
+        let content = e.currentTarget.parentNode.childNodes[1].value
 
         // Verify content integrity
         if (content.length <= 0 || content.length > 100) {
@@ -45,7 +47,7 @@ const CreateComment = ({ postId, setPostComments }) => {
             getNewComment();
 
             // Set inputfield to null
-            e.target.parentNode.childNodes[1].value="";
+            e.currentTarget.parentNode.childNodes[1].value="";
         })
         .catch((e) => {
             console.log(e.response);
@@ -56,7 +58,7 @@ const CreateComment = ({ postId, setPostComments }) => {
         <div className="createcomment">
             <img className="createcomment__image" src={user.image} alt="user_img"/>
             <textarea className="createcomment__content" placeholder="Give your thoughts!"/>
-            <button className="createcomment__button" onClick={ comment }>Send</button>
+            <Button variant="contained" endIcon={<SendIcon />} className="createcomment__button" onClick={ comment }>Send</Button>
         </div>
     );
 }

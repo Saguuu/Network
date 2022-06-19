@@ -32,44 +32,38 @@
 }
 
 .profileheader__topRightButton {
-    background: white;
-    border-color: #488ccc #488ccc #488ccc;
-    border-radius: 10px;
-    border: 1px solid;
-    color: #111;
-    width: 100px;
-    height: 40px;
-    font-size: 15px;
-    margin-top: 10px;
-    margin-right: 10px;
+    text-transform: capitalize !important;
+    background-color: rgb(255, 255, 255) !important;
+    width: 100px !important;
+    height: 30px !important;
+    color: black !important;
+    font-size: 15px !important;
 }
 
 .profileheader__topRightButton:hover {
-    background-color: rgb(53, 97, 146);
+    background-color: rgb(53, 97, 146) !important;
+    color: white !important;
     cursor: pointer;
 }
 
 .profileheader__topRightEdit {
     text-transform: capitalize !important;
+    background-color: rgb(255, 255, 255) !important;
+    color: black !important;
 }
 
 .profileheader__topRightButtonUnfollow {
-    background-color: rgb(53, 97, 146);
+    text-transform: capitalize !important;
+    background-color: rgb(53, 97, 146) !important;
     border-color: #488ccc #488ccc #488ccc;
-    border-radius: 10px;
+    width: 100px !important;
+    height: 30px !important;
     border: 1px solid;
-    color: white;
-    width: 100px;
-    height: 40px;
-    font-size: 15px;
-    margin-top: 10px;
-    margin-right: 10px;
 }
 
 .profileheader__topRightButtonUnfollow:hover {
-    background-color: white;
-    color: red;
-    cursor: pointer;
+    background-color: rgb(255, 255, 255) !important;
+    color: red;  
 }
 
 .profileheader__middleBio {
