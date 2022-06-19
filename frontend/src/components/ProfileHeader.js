@@ -4,6 +4,7 @@ import AuthContext from '../context/AuthContext';
 import Modal from './Modal';
 import axios from "../axios";
 import Skeleton from '@mui/material/Skeleton';
+import Button from '@mui/material/Button';
 
 const ProfileHeader = ({ userId, username, image, bio, follows, followed, handleFeed, handleFollow, setProfileUser, headerLoading, currentFeed }) => {
 
@@ -86,7 +87,10 @@ const ProfileHeader = ({ userId, username, image, bio, follows, followed, handle
                 </div>
                 <div className="profileheader__topRight">
                     {isCurrentUser ? (
-                        <button id={userId} className="profileheader__topRightButton" onClick={() => setModalIsOpen(true)}>Edit Profile</button>
+                        <Button id={userId} variant="contained" className="profileheader__topRightEdit" onClick={() => setModalIsOpen(true)} sx={{
+                            margin: 1,
+                        }}>Edit Profile</Button>
+                        /*<button id={userId} className="profileheader__topRightButton" onClick={() => setModalIsOpen(true)}>Edit Profile</button>*/
                     ) : null}
                     {!isCurrentUser && isFollowing ? (
                         <button id={userId} className="profileheader__topRightButtonUnfollow" onClick={handleFollow}>Unfollow</button>

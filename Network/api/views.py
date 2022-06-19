@@ -139,6 +139,9 @@ def postSingle(request, pk):
 @permission_classes([IsAuthenticated])
 def postCreate(request):
 
+    if request.user.is_anonymous or (len(request.data["content"]) > 100 or len(request.data["content"]) < 0):
+        return Response("Rejected")
+
     # Create new post in db
     if len(request.data["content"]) <= 100 and len(request.data["content"]) > 0:
         new_post = Post(poster=request.user.site_user, content=request.data["content"])
@@ -151,7 +154,7 @@ def postCreate(request):
 def postUpdate(request, pk):
     
     # Update post in db by id if authenticated and valid
-    if request.user.is_anonymous:
+    if request.user.is_anonymous or (len(request.data["content"]) > 100 or len(request.data["content"]) < 0):
         return Response("Rejected")
     else:
         post = Post.objects.get(id=pk)
@@ -247,7 +250,7 @@ def followFollow(request):
         new_follow.save()
         return Response("User followed")
 
-@api_view(["DELETE"])
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def followUnfollow(request):
     
@@ -288,6 +291,9 @@ def likeUnlike(request):
 def commentComment(request):
     
     # Create comment on a post in db
+    if request.user.is_anonymous or (len(request.data["content"]) > 100 or len(request.data["content"]) < 0):
+        return Response("Rejected")
+        
     commenter = siteUser.objects.get(id=request.data["commenter"])
     post = Post.objects.get(id=request.data["post"])
     content = request.data["content"]

@@ -34,11 +34,11 @@
 .profileheader__topRightButton {
     background: white;
     border-color: #488ccc #488ccc #488ccc;
-    border-radius: 360px;
+    border-radius: 10px;
     border: 1px solid;
     color: #111;
     width: 100px;
-    height: 50px;
+    height: 40px;
     font-size: 15px;
     margin-top: 10px;
     margin-right: 10px;
@@ -49,14 +49,18 @@
     cursor: pointer;
 }
 
+.profileheader__topRightEdit {
+    text-transform: capitalize !important;
+}
+
 .profileheader__topRightButtonUnfollow {
     background-color: rgb(53, 97, 146);
     border-color: #488ccc #488ccc #488ccc;
-    border-radius: 360px;
+    border-radius: 10px;
     border: 1px solid;
     color: white;
     width: 100px;
-    height: 50px;
+    height: 40px;
     font-size: 15px;
     margin-top: 10px;
     margin-right: 10px;
@@ -166,6 +170,12 @@
         padding: 10px;
         height: 50px;
         width: 50px;
+    }
+
+    .profileheader__topRightEdit {
+        width: 95px !important;
+        height: 30px !important;
+        font-size: 12px !important;
     }
 
     .profileheader__topRightButton {
