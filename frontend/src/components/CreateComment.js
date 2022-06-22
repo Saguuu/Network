@@ -16,7 +16,6 @@ const CreateComment = ({ postId, setPostComments }) => {
 
         // Verify content integrity
         if (content.length <= 0 || content.length > 100) {
-            console.log("Comment too long or too short");
             return
         }
 
