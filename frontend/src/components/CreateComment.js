@@ -20,6 +20,9 @@ const CreateComment = ({ postId, setPostComments }) => {
             return
         }
 
+        // Set inputfield to null
+        e.currentTarget.parentNode.childNodes[1].value="";
+
         const headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + String(authTokens.access)
@@ -45,9 +48,6 @@ const CreateComment = ({ postId, setPostComments }) => {
                 })
             }
             getNewComment();
-
-            // Set inputfield to null
-            e.currentTarget.parentNode.childNodes[1].value="";
         })
         .catch((e) => {
             console.log(e.response);

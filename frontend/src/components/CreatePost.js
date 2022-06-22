@@ -22,6 +22,9 @@ const CreatePost = ({ setPosts }) => {
             return
         }
 
+        // Reset input field to empty string
+        e.currentTarget.parentNode.parentNode.childNodes[0].childNodes[1].value = "";
+
         await axios.post("/api/post-create/", {
             "content": content
         }, { 
@@ -31,9 +34,6 @@ const CreatePost = ({ setPosts }) => {
             }
         })
         .then(() => {
-
-            // Reset input field to empty string
-            e.currentTarget.parentNode.parentNode.childNodes[0].childNodes[1].value = "";
 
             // Fetch users latest post from db then add it to feed state
             let updateState = async () => {

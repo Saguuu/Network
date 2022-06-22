@@ -112,7 +112,7 @@ def userLikes(request, pk):
 def userPosts(request, pk):
 
     # Return list of all posts of a specific user
-    posts = Post.objects.all().filter(poster=pk)
+    posts = Post.objects.all().filter(poster=pk).order_by("-id")
     serializer = PostSerializer(posts, many=True)
 
     return Response(serializer.data)

@@ -229,17 +229,15 @@ const Profile = () => {
             .then((res) => {
                 setProfileUser(res.data);
                 setTimeout(() => {
-                    setFeedLoading(false);
                     setHeaderLoading(false);
-                    setProfileUserPosts(res.data.user_posts);
-                }, 1000);                
+                }, 1000);  
+                fetchProfileUserPosts();              
             })
             .catch((e) => {
                 console.log(e.response);
             });
         }
         fetchProfileUserData();
-
     }, [userId]);
 
     return (
@@ -265,7 +263,7 @@ const Profile = () => {
                     />
                     {currentFeed.posts ? (
                     <ProfileFeed 
-                    posts={ profileUserPosts.map(post => (post)).reverse() }
+                    posts={ profileUserPosts.map(post => (post)) }
                     setProfileUserPosts={ setProfileUserPosts }
                     feedLoading={ feedLoading }
                     />
