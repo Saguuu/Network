@@ -12,7 +12,7 @@ function App() {
             <div className="app">
               <AuthProvider>
                 <Routes>
-                <Route path="/register" element={<Register />}></Route>
+                  <Route path="/register" element={<Register />}></Route>
                   <Route path="/login" element={<Login />}></Route>
                   <Route path="/user/:userId" element={<Profile />}></Route>
                   <Route path="/following" element={<Following />}></Route>

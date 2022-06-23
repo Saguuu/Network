@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import "./Profile.css";
 import Nav from './Nav';
 import axios from "../axios";
@@ -12,6 +12,7 @@ import UserFeedFollowed from './UserFeedFollowed';
 const Profile = () => {
 
     // Initialize state
+    const navigate = useNavigate();
     const [profileUserPosts, setProfileUserPosts] = useState([]);
     const [profileUser, setProfileUser] = useState([]);
     const [profileLikes, setProfileLikes] = useState([]);
@@ -227,6 +228,10 @@ const Profile = () => {
         const fetchProfileUserData = async () => {
             await axios.get(`/api/user-single/${userId}/`)
             .then((res) => {
+                if (res.data === "User DNE") {
+                    navigate("/");
+                    return
+                }
                 setProfileUser(res.data);
                 setTimeout(() => {
                     setHeaderLoading(false);

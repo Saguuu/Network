@@ -89,7 +89,11 @@ def userList(request):
 def userSingle(request, pk):
 
     # Return data one single user
-    user = siteUser.objects.get(id=pk)
+    try:
+        user = siteUser.objects.get(id=pk)
+    except:
+        return Response("User DNE")
+        
     serializer = siteUserSerializer(user, many=False)
 
     return Response(serializer.data)
