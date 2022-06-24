@@ -26,7 +26,7 @@ from datetime import timedelta
 SECRET_KEY = 'django-insecure-lba$21^=z3ndu*simmff3%ccam=hqj6*q5l%vy21_x_i7)f)_5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["https://xennetwork.herokuapp.com/", "127.0.0.1", "localhost"]
 
@@ -125,18 +125,18 @@ WSGI_APPLICATION = 'network.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': BASE_DIR / 'db.sqlite3',
-    #}
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "network",
-        "USER": "postgres",
-        "PASSWORD": "Pass1234",
-        "HOST": "localhost",
-        "PORT": '',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+    #"default": {
+        #"ENGINE": "django.db.backends.postgresql_psycopg2",
+        #"NAME": "network",
+        #"USER": "postgres",
+        #"PASSWORD": "Pass1234",
+        #"HOST": "localhost",
+        #"PORT": '',
+    #}
 }
 
 # Password validation
@@ -182,7 +182,11 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+"https://xennetwork.herokuapp.com",
+"http://localhost:8080",
+"http://127.0.0.1:8000"
+]
 
 if DEBUG:
     STATICFILES_DIRS = [
