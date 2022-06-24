@@ -26,7 +26,7 @@ from datetime import timedelta
 SECRET_KEY = 'django-insecure-lba$21^=z3ndu*simmff3%ccam=hqj6*q5l%vy21_x_i7)f)_5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["xennetwork.herokuapp.com/", "127.0.0.1", "localhost"]
 
@@ -183,6 +183,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-STATICFILES_DIRS = [
+if DEBUG:
+    STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/build/static")
-]
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "frontend/build/static")
