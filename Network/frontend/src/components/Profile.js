@@ -93,6 +93,11 @@ const Profile = () => {
 
         e.preventDefault();
 
+        if (!user) {
+            console.log("Log in to follow users");
+            return
+        }
+
         const headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + String(authTokens?.access)
