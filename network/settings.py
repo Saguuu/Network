@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-lba$21^=z3ndu*simmff3%ccam=hqj6*q5l%vy21_x_i7)f)_5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://xennetwork.herokuapp.com/", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["xennetwork.herokuapp.com", "127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -182,7 +182,12 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = [
+"https://xennetwork.herokuapp.com",
+"http://localhost:8000",
+"http://localhost:3000",
+"http://127.0.0.1:8000"
+]
 
 if DEBUG:
     STATICFILES_DIRS = [
