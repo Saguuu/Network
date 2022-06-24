@@ -189,4 +189,4 @@ if DEBUG:
     os.path.join(BASE_DIR, "frontend/build/static")
     ]
 else: 
-    STATIC_ROOT = os.path.join(BASE_DIR, "frontend/build/static")
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
