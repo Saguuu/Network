@@ -1,1 +1,3 @@
+cd network
+
 web: gunicorn network.wsgi --log-file -
