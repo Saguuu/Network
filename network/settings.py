@@ -189,9 +189,9 @@ CORS_ALLOWED_ORIGINS = [
 "http://127.0.0.1:8000"
 ]
 
-if DEBUG:
-    STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/build/static")
-    ]
-else: 
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_DIRS = [
+os.path.join(BASE_DIR, "frontend/build/static")
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
