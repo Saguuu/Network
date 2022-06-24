@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-lba$21^=z3ndu*simmff3%ccam=hqj6*q5l%vy21_x_i7)f)_5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://xennetwork.herokuapp.com/", "127.0.0.1"]
+ALLOWED_HOSTS = ["xennetwork.herokuapp.com/", "127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -88,7 +88,6 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -175,7 +174,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, "frontend/build/static")
 STATIC_URL = '/static/'
 
 # Default primary key field type
@@ -183,7 +181,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/build/static")
