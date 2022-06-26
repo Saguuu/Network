@@ -3,3 +3,4 @@
 **/__pycache__
 *.http
 db.sqlite3
+.env
